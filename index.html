@@ -40,7 +40,21 @@
       -moz-user-select: text;
       -ms-user-select: text;
       user-select: text;
-      text-transform: none; /* Pastikan tidak ada transformasi huruf */
+    }
+    
+    /* Input email hanya huruf kecil */
+    input[type="email"] {
+      text-transform: lowercase;
+    }
+    
+    /* Input password bisa huruf besar dan kecil */
+    input[type="password"], input[type="text"].password-field {
+      text-transform: none;
+    }
+    
+    /* Untuk input tel (nomor WhatsApp) */
+    input[type="tel"] {
+      text-transform: none;
     }
     
     /* Mencegah terjemahan otomatis */
@@ -351,7 +365,21 @@
       transition: 0.25s;
       box-shadow: 0 0 10px #ff55005e;
       -webkit-appearance: none;
-      text-transform: none; /* Memastikan huruf bisa besar dan kecil */
+    }
+
+    /* Input email - otomatis huruf kecil */
+    .input-group input[type="email"] {
+      text-transform: lowercase;
+    }
+    
+    /* Input password - bisa huruf besar dan kecil */
+    .input-group input[type="password"] {
+      text-transform: none;
+    }
+    
+    /* Input tel - bisa huruf besar dan kecil */
+    .input-group input[type="tel"] {
+      text-transform: none;
     }
 
     .input-group input:focus {
@@ -363,7 +391,6 @@
     .input-group input::placeholder {
       color: #c08a5a;
       font-size: clamp(0.85rem, 3vw, 0.95rem);
-      text-transform: none;
     }
 
     /* KHUSUS UNTUK PASSWORD GROUP */
