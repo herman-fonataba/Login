@@ -18,6 +18,17 @@
   <!-- Font Awesome 6 (free) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
+    /* Custom Cursor untuk perangkat non-touch (laptop/desktop) */
+    body {
+      cursor: url('https://phoenix-taekwondo-family.vercel.app/Foto/cursor.svg') 0 0, auto;
+    }
+    
+    /* Untuk elemen yang bisa diklik (link, button, input) */
+    a, button, .phoenix-btn, .forgot-phoenix, .back-to-login, .register-prompt a, 
+    input, .password-toggle, [role="button"], .circle-logo-wrapper {
+      cursor: url('https://phoenix-taekwondo-family.vercel.app/Foto/cursor.svg') 8 8, pointer;
+    }
+    
     /* Proteksi dasar */
     * {
       margin: 0;
@@ -55,6 +66,25 @@
     /* Untuk input tel (nomor WhatsApp) */
     input[type="tel"] {
       text-transform: none;
+    }
+    
+    /* Placeholder dan tulisan input dengan font normal */
+    .input-group input, .input-group input::placeholder {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      letter-spacing: normal;
+    }
+    
+    /* Tulisan "Belum punya akun?" dan "Daftar sekarang" dengan font normal */
+    .register-prompt {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      letter-spacing: normal;
+    }
+    
+    .register-prompt a {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
     }
     
     /* Mencegah terjemahan otomatis */
@@ -365,6 +395,9 @@
       transition: 0.25s;
       box-shadow: 0 0 10px #ff55005e;
       -webkit-appearance: none;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      letter-spacing: normal;
     }
 
     /* Input email - otomatis huruf kecil */
@@ -391,6 +424,9 @@
     .input-group input::placeholder {
       color: #c08a5a;
       font-size: clamp(0.85rem, 3vw, 0.95rem);
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      letter-spacing: normal;
     }
 
     /* KHUSUS UNTUK PASSWORD GROUP */
@@ -459,6 +495,7 @@
       margin: 10px 0 20px;
       color: #ffb082;
       font-size: clamp(0.8rem, 3.5vw, 0.9rem);
+      font-family: 'Poppins', sans-serif;
     }
     
     .phoenix-extras.center {
@@ -472,6 +509,8 @@
       white-space: nowrap;
       cursor: pointer;
       padding: 2px 0;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
     }
     
     .back-to-login {
@@ -497,6 +536,7 @@
       justify-content: center;
       letter-spacing: 3px;
       text-transform: uppercase;
+      font-family: 'Cinzel', serif;
     }
 
     .phoenix-btn:active {
@@ -510,22 +550,26 @@
       letter-spacing: 2px;
     }
 
-    /* LINK DAFTAR - WHATSAPP */
+    /* LINK DAFTAR - WHATSAPP (TULISAN NORMAL) */
     .register-prompt {
       text-align: center;
       margin: 20px 0 15px;
       color: #ffb082;
       font-size: clamp(0.9rem, 4vw, 1.1rem);
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      letter-spacing: normal;
     }
 
     .register-prompt a {
       color: #ffb86b;
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 500;
       border-bottom: 2px solid #ff7733;
       transition: 0.2s;
       display: inline-block;
       padding: 3px 8px;
+      font-family: 'Poppins', sans-serif;
     }
 
     .register-prompt a:hover {
@@ -586,12 +630,14 @@
       font-size: clamp(1.1rem, 4.5vw, 1.3rem);
       margin-bottom: 10px;
       color: #ffaa66;
+      font-family: 'Cinzel', serif;
     }
 
     .extra-content p {
       font-size: clamp(0.85rem, 3.5vw, 0.95rem);
       line-height: 1.6;
       margin: 8px 0;
+      font-family: 'Poppins', sans-serif;
     }
 
     /* Style untuk tentang phoenix */
@@ -613,6 +659,7 @@
       border-bottom: 2px dashed #ff884d;
       padding: 12px 0;
       margin: 12px 0;
+      font-family: 'Cinzel', serif;
     }
     
     .quote i {
@@ -629,6 +676,7 @@
       text-align: left;
       border-left: 4px solid #ff9933;
       padding-left: 8px;
+      font-family: 'Poppins', sans-serif;
     }
     
     .schedule-days {
@@ -647,6 +695,7 @@
       text-align: left;
       font-size: clamp(0.85rem, 3.5vw, 0.95rem);
       flex-wrap: wrap;
+      font-family: 'Poppins', sans-serif;
     }
     
     .schedule-item i {
@@ -670,6 +719,7 @@
       margin-left: 5px;
       color: #ffbb77;
       border: 1px solid #ff9933;
+      font-family: 'Poppins', sans-serif;
     }
 
     /* HALAMAN SEMBUNYI */
@@ -770,6 +820,14 @@
         height: 200px;
       }
     }
+    
+    /* Untuk perangkat touch (HP/Tablet) - mengembalikan cursor default */
+    @media (hover: none) and (pointer: coarse) {
+      body, a, button, .phoenix-btn, .forgot-phoenix, .back-to-login, .register-prompt a, 
+      input, .password-toggle, [role="button"], .circle-logo-wrapper {
+        cursor: default !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -856,7 +914,7 @@
       </button>
     </form>
 
-    <!-- REGISTER PROMPT DENGAN LINK WHATSAPP -->
+    <!-- REGISTER PROMPT DENGAN LINK WHATSAPP (TULISAN NORMAL) -->
     <div class="register-prompt">
       <i class="fas fa-feather"></i>
       Belum punya akun? <a href="https://wa.me/628124587945" target="_blank" rel="noopener noreferrer">Daftar sekarang</a>
@@ -975,16 +1033,13 @@
   <script>
     (function() {
       // ========== MENCEGAH GOOGLE TRANSLATE ==========
-      // Menambahkan atribut untuk mencegah terjemahan otomatis
       document.documentElement.setAttribute('translate', 'no');
       document.body.setAttribute('translate', 'no');
       
-      // Menonaktifkan fitur translate Chrome
       if (typeof chrome !== 'undefined' && chrome.translate) {
         chrome.translate = null;
       }
       
-      // Mencegah popup translate
       document.addEventListener('DOMContentLoaded', function() {
         const meta = document.createElement('meta');
         meta.name = 'google';
@@ -994,13 +1049,11 @@
       
       // ========== PROTEKSI INSPECT, KLIK KANAN, COPY ==========
       
-      // Cegah klik kanan
       document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
         return false;
       });
       
-      // Cegah shortcut inspect element
       document.addEventListener('keydown', function(e) {
         if (e.key === 'F12' || 
             (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j')) ||
@@ -1018,7 +1071,6 @@
         }
       });
       
-      // Cegah seleksi teks (kecuali di input)
       document.addEventListener('selectstart', function(e) {
         if (!(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
           e.preventDefault();
@@ -1026,13 +1078,11 @@
         }
       });
       
-      // Cegah drag
       document.addEventListener('dragstart', function(e) {
         e.preventDefault();
         return false;
       });
       
-      // Cegah copy untuk elemen non-input
       document.addEventListener('copy', function(e) {
         if (!(document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) {
           e.preventDefault();
@@ -1040,7 +1090,6 @@
         }
       });
       
-      // Deteksi DevTools
       setInterval(function() {
         const widthThreshold = window.outerWidth - window.innerWidth > 160;
         const heightThreshold = window.outerHeight - window.innerHeight > 160;
@@ -1311,6 +1360,6 @@
   <!-- fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
 </body>
 </html>
