@@ -1,216 +1,1257 @@
-<!doctype html>
-<html lang="id" class="h-full">
- <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Halaman Kosong</title>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="/_sdk/element_sdk.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  <!-- JUDUL TAB WEB -->
+  <title>PHOENIX TAEKWONDO FAMILY</title>
+  
+  <!-- FAVICON (LOGO SAMA) -->
+  <link rel="icon" type="image/svg+xml" href="https://phoenix-taekwondo-family.vercel.app/Foto/PHOENIX%20TAEKWONDO%20FAMILY.svg">
+  <link rel="apple-touch-icon" href="https://phoenix-taekwondo-family.vercel.app/Foto/PHOENIX%20TAEKWONDO%20FAMILY.svg">
+  
+  <!-- Font Awesome 6 (free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
+    /* Proteksi dasar */
     * {
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cinzel', 'Poppins', serif;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
     
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-20px); }
+    /* Tetap izinkan input untuk mengetik */
+    input, textarea {
+      -webkit-user-select: text;
+      -khtml-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
     }
-    
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+
+    body {
+      min-height: 100vh;
+      width: 100%;
+      background: radial-gradient(circle at 20% 30%, #2f0f00, #0a0101 80%);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      position: relative;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 10px;
+      margin: 0;
     }
-    
-    @keyframes pulse-ring {
-      0% { transform: scale(0.8); opacity: 0.5; }
-      50% { transform: scale(1.2); opacity: 0; }
-      100% { transform: scale(0.8); opacity: 0.5; }
+
+    /* CANVAS API DAN BULU */
+    #phoenixCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.9;
     }
-    
-    .float-animation {
-      animation: float 4s ease-in-out infinite;
+
+    .dark-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at 30% 50%, rgba(0,0,0,0.2) 0%, #080101 90%);
+      z-index: 1;
+      pointer-events: none;
     }
-    
-    .fade-in-up {
-      animation: fadeInUp 0.8s ease-out forwards;
-    }
-    
-    .fade-in-up-delay-1 {
-      animation: fadeInUp 0.8s ease-out 0.2s forwards;
+
+    /* ========== BLOKIR IPHONE ========== */
+    .iphone-blocker {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: #0d0101;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 4px solid #ff4400;
+      box-shadow: 0 0 100px #ff3300 inset;
+      font-family: 'Cinzel', serif;
       opacity: 0;
+      pointer-events: none;
+      transition: 0.3s;
+    }
+
+    .iphone-blocker.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .blocker-content {
+      max-width: 90%;
+      width: 500px;
+      background: rgba(30, 8, 0, 0.9);
+      padding: 30px 20px;
+      border-radius: 60px 20px;
+      border: 3px solid #ff884d;
+      box-shadow: 0 0 80px #ff5500;
+    }
+
+    .blocker-content i {
+      font-size: clamp(3rem, 15vw, 5rem);
+      color: #ff9933;
+      margin-bottom: 15px;
+      filter: drop-shadow(0 0 20px red);
+      animation: blockerFlicker 1.5s infinite alternate;
+    }
+
+    @keyframes blockerFlicker {
+      0% { transform: scale(1); text-shadow: 0 0 10px orange; }
+      100% { transform: scale(1.1); text-shadow: 0 0 40px #ff4400, 0 0 80px #ff8800; }
+    }
+
+    .blocker-content h1 {
+      color: #ffb577;
+      font-size: clamp(1.5rem, 6vw, 2.5rem);
+      margin-bottom: 15px;
+      text-shadow: 0 0 20px #f60;
+      line-height: 1.3;
+    }
+
+    .blocker-content p {
+      color: #ffbc8c;
+      font-size: clamp(1rem, 4vw, 1.3rem);
+      border-top: 2px dashed #ff7733;
+      padding-top: 15px;
+    }
+
+    /* ========== SCREENSHOT DETECTION OVERLAY ========== */
+    .screenshot-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: white;
+      font-family: 'Cinzel', serif;
+      text-align: center;
+      padding: 20px;
+      animation: fadeIn 0.3s;
     }
     
-    .fade-in-up-delay-2 {
-      animation: fadeInUp 0.8s ease-out 0.4s forwards;
-      opacity: 0;
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     
-    .pulse-ring {
-      animation: pulse-ring 2s ease-in-out infinite;
+    .screenshot-overlay i {
+      font-size: clamp(3rem, 15vw, 5rem);
+      color: #ff4400;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 30px red);
+      animation: warningFlicker 1.5s infinite alternate;
+    }
+    
+    @keyframes warningFlicker {
+      0% { transform: scale(1); text-shadow: 0 0 20px red; }
+      100% { transform: scale(1.1); text-shadow: 0 0 60px #ff8800, 0 0 120px #ff4400; }
+    }
+    
+    .screenshot-overlay h1 {
+      font-size: clamp(1.8rem, 7vw, 3rem);
+      margin-bottom: 15px;
+      color: #ffaa33;
+      line-height: 1.3;
+    }
+    
+    .screenshot-overlay p {
+      font-size: clamp(1rem, 4vw, 1.3rem);
+      color: #ffbb77;
+      max-width: 90%;
+      line-height: 1.6;
+    }
+
+    /* KONTAINER UTAMA LOGIN DAN FORGOT PASSWORD */
+    .phoenix-wrapper {
+      position: relative;
+      z-index: 20;
+      width: 100%;
+      max-width: min(580px, 95%);
+      background: rgba(25, 8, 0, 0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 2px solid rgba(255, 140, 0, 0.7);
+      border-radius: 60px 20px 60px 20px;
+      box-shadow: 0 20px 50px #ff2200b3, 0 0 0 2px #ffaa33 inset, 0 0 40px #ff7700;
+      padding: clamp(20px, 5vw, 40px) clamp(15px, 4vw, 30px);
+      transition: 0.3s;
+      animation: borderFlicker 3s infinite alternate;
+      margin: 15px auto;
+    }
+
+    @keyframes borderFlicker {
+      0% { border-color: rgba(255, 100, 0, 0.6); box-shadow: 0 15px 40px #ff3300b3, 0 0 0 2px #ff9933 inset; }
+      100% { border-color: rgba(255, 200, 0, 0.9); box-shadow: 0 25px 60px #ff6600, 0 0 0 4px #ffcc66 inset, 0 0 70px #ffaa33; }
+    }
+
+    /* HEADER */
+    .phoenix-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: clamp(15px, 4vh, 30px);
+    }
+
+    /* GAMBAR SELAMAT DATANG */
+    .welcome-image-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .welcome-image {
+      max-width: min(450px, 90%);
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 0 30px #ff8800) brightness(1.2);
+      transition: 0.3s;
+      animation: welcomeGlow 2s infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes welcomeGlow {
+      0% { filter: drop-shadow(0 0 20px #ff6600) brightness(1.1); }
+      100% { filter: drop-shadow(0 0 50px #ffaa33) brightness(1.4); }
+    }
+
+    /* AREA LOGO LINGKARAN */
+    .logo-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 5px 0;
+    }
+
+    .circle-logo-wrapper {
+      width: min(200px, 40vw);
+      height: min(200px, 40vw);
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #ff5500, #ff9933, #ffcc66);
+      padding: 4px;
+      box-shadow: 0 0 40px #ff8800, 0 0 80px #ff4400, 0 0 120px #ffaa33;
+      animation: circlePulse 2s infinite alternate;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes circlePulse {
+      0% { box-shadow: 0 0 30px #ff6600, 0 0 60px #ff3300; transform: scale(1); }
+      100% { box-shadow: 0 0 60px #ffaa33, 0 0 100px #ff7700, 0 0 150px #ff5500; transform: scale(1.05); }
+    }
+
+    .circle-logo {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #1a0700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 12px;
+      border: 2px solid rgba(255, 200, 100, 0.7);
+    }
+
+    .circle-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 15px #ffaa33) brightness(1.3);
+      transition: 0.3s;
+      pointer-events: none;
+    }
+
+    /* JUDUL HALAMAN */
+    .page-title {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #ffba7a;
+      font-size: clamp(1.3rem, 5vw, 1.8rem);
+      text-shadow: 0 0 15px #ff7700;
+    }
+    
+    .page-title i {
+      margin: 0 5px;
+      color: #ff9933;
+    }
+
+    /* INPUT GROUP */
+    .input-group {
+      margin-bottom: clamp(15px, 3vh, 25px);
+      position: relative;
+      width: 100%;
+    }
+
+    .input-group i:not(.password-toggle) {
+      position: absolute;
+      left: clamp(12px, 3vw, 18px);
+      top: 50%;
+      transform: translateY(-50%);
+      color: #ffb074;
+      font-size: clamp(1rem, 4vw, 1.3rem);
+      text-shadow: 0 0 15px #ff6a00;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .input-group input {
+      width: 100%;
+      background: rgba(40, 12, 0, 0.8);
+      border: 2px solid #c06000;
+      border-radius: 60px 15px 60px 15px;
+      padding: clamp(12px, 3vh, 16px) clamp(40px, 8vw, 55px) clamp(12px, 3vh, 16px) clamp(40px, 8vw, 50px);
+      font-size: clamp(0.9rem, 3.5vw, 1rem);
+      color: #ffdec4;
+      outline: none;
+      transition: 0.25s;
+      box-shadow: 0 0 10px #ff55005e;
+      -webkit-appearance: none;
+    }
+
+    .input-group input:focus {
+      border-color: #ff9933;
+      background: #2f1200;
+      box-shadow: 0 0 30px #ff8800, 0 0 0 3px #ffbb77 inset;
+    }
+
+    .input-group input::placeholder {
+      color: #c08a5a;
+      font-size: clamp(0.85rem, 3vw, 0.95rem);
+    }
+
+    /* KHUSUS UNTUK PASSWORD GROUP */
+    .password-group {
+      position: relative;
+    }
+    
+    .password-toggle {
+      position: absolute;
+      right: clamp(12px, 3vw, 15px);
+      top: 50%;
+      transform: translateY(-50%);
+      color: #ffb074;
+      font-size: clamp(1rem, 4vw, 1.3rem);
+      cursor: pointer;
+      z-index: 3;
+      transition: 0.2s;
+      text-shadow: 0 0 15px #ff6a00;
+      padding: 8px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.2);
+    }
+    
+    .password-toggle:hover {
+      color: #ffdd99;
+      transform: translateY(-50%) scale(1.1);
+      background: rgba(255, 140, 0, 0.3);
+    }
+    
+    .password-toggle:active {
+      color: #ffffff;
+    }
+
+    /* EMBER LINE */
+    .ember-line {
+      display: flex;
+      justify-content: center;
+      gap: clamp(3px, 1.5vw, 6px);
+      margin: 10px 0 15px;
+      height: clamp(6px, 1.5vh, 10px);
+    }
+
+    .ember-line span {
+      width: clamp(3px, 1.5vw, 6px);
+      height: clamp(3px, 1.5vw, 6px);
+      background: #ff7b24;
+      border-radius: 50%;
+      filter: blur(1px);
+      animation: spark 1.2s infinite alternate;
+    }
+
+    @keyframes spark {
+      0% { transform: scale(1); opacity: 0.3; }
+      100% { transform: scale(2); opacity: 1; }
+    }
+
+    /* EXTRAS - LINK */
+    .phoenix-extras {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      margin: 10px 0 20px;
+      color: #ffb082;
+      font-size: clamp(0.8rem, 3.5vw, 0.9rem);
+    }
+    
+    .phoenix-extras.center {
+      justify-content: center;
+    }
+
+    .forgot-phoenix, .back-to-login {
+      color: #ffaa66;
+      text-decoration: none;
+      border-bottom: 2px dotted #ff884d;
+      white-space: nowrap;
+      cursor: pointer;
+      padding: 2px 0;
+    }
+    
+    .back-to-login {
+      border-bottom: 2px dotted #ff9933;
+    }
+
+    /* TOMBOL UTAMA */
+    .phoenix-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #b34700, #ff6600, #ff9933);
+      border: none;
+      padding: clamp(12px, 3.5vh, 16px) 10px;
+      border-radius: 50px 10px 50px 10px;
+      font-weight: 700;
+      font-size: clamp(1.2rem, 6vw, 1.6rem);
+      color: #fff3d6;
+      text-shadow: 0 0 20px #ffd9b3, 0 0 40px #ff7700;
+      box-shadow: 0 8px 0 #7a2e00, 0 0 30px #ff8800, 0 0 50px #ff4400;
+      cursor: pointer;
+      transition: 0.1s linear;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .phoenix-btn:active {
+      transform: translateY(6px);
+      box-shadow: 0 4px 0 #702500, 0 0 50px #ffaa33;
+    }
+    
+    .phoenix-btn.small {
+      font-size: clamp(1rem, 5vw, 1.3rem);
+      padding: clamp(10px, 3vh, 14px);
+      letter-spacing: 2px;
+    }
+
+    /* LINK DAFTAR - WHATSAPP */
+    .register-prompt {
+      text-align: center;
+      margin: 20px 0 15px;
+      color: #ffb082;
+      font-size: clamp(0.9rem, 4vw, 1.1rem);
+    }
+
+    .register-prompt a {
+      color: #ffb86b;
+      text-decoration: none;
+      font-weight: 700;
+      border-bottom: 2px solid #ff7733;
+      transition: 0.2s;
+      display: inline-block;
+      padding: 3px 8px;
+    }
+
+    .register-prompt a:hover {
+      color: #ffeedd;
+      border-bottom-color: #ffcc99;
+      text-shadow: 0 0 15px #ffaa33;
+    }
+
+    .register-prompt i {
+      margin: 0 5px;
+      font-size: 0.9rem;
+    }
+
+    /* PARTIKEL EMBER */
+    #emberContainer {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .ember {
+      position: absolute;
+      background: radial-gradient(circle, #ffdd99, #ff8833, #cc3300);
+      border-radius: 50%;
+      filter: blur(2px) drop-shadow(0 0 8px #ff9933);
+      opacity: 0.9;
+      z-index: 10;
+    }
+
+    /* feather glow samping */
+    .feather-glow {
+      position: fixed;
+      width: min(150px, 20vw);
+      height: min(250px, 40vh);
+      background: radial-gradient(ellipse, #ff993355, transparent);
+      border-radius: 50%;
+      filter: blur(40px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* KONTEN TAMBAHAN */
+    .extra-content {
+      margin-top: 25px;
+      padding: 15px;
+      background: rgba(255, 140, 0, 0.1);
+      border-radius: 30px 10px;
+      border: 1px solid #ff884d;
+      color: #ffb082;
+      text-align: center;
+    }
+
+    .extra-content h3 {
+      font-size: clamp(1.1rem, 4.5vw, 1.3rem);
+      margin-bottom: 10px;
+      color: #ffaa66;
+    }
+
+    .extra-content p {
+      font-size: clamp(0.85rem, 3.5vw, 0.95rem);
+      line-height: 1.6;
+      margin: 8px 0;
+    }
+
+    /* Style untuk tentang phoenix */
+    .about-text {
+      text-align: center;
+      padding: 5px;
+    }
+    
+    .about-text p {
+      margin-bottom: 12px;
+      color: #ffddaa;
+    }
+    
+    .quote {
+      font-style: italic;
+      color: #ffaa66;
+      font-size: clamp(0.9rem, 4vw, 1rem);
+      border-top: 2px dashed #ff884d;
+      border-bottom: 2px dashed #ff884d;
+      padding: 12px 0;
+      margin: 12px 0;
+    }
+    
+    .quote i {
+      color: #ff9933;
+      margin: 0 5px;
+    }
+
+    /* JADWAL LATIHAN */
+    .schedule-school {
+      font-weight: 700;
+      color: #ffbb77;
+      font-size: clamp(0.95rem, 4vw, 1.1rem);
+      margin: 12px 0 5px 0;
+      text-align: left;
+      border-left: 4px solid #ff9933;
+      padding-left: 8px;
+    }
+    
+    .schedule-days {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 12px;
+      padding-left: 10px;
+    }
+    
+    .schedule-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #ffddaa;
+      text-align: left;
+      font-size: clamp(0.85rem, 3.5vw, 0.95rem);
+      flex-wrap: wrap;
+    }
+    
+    .schedule-item i {
+      color: #ff9933;
+      font-size: 0.9rem;
+      width: 18px;
+    }
+    
+    .schedule-item .day {
+      min-width: 50px;
+      font-weight: 600;
+      color: #ffbb77;
+    }
+    
+    .wit-badge {
+      display: inline-block;
+      background: rgba(255, 140, 0, 0.3);
+      padding: 2px 6px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      margin-left: 5px;
+      color: #ffbb77;
+      border: 1px solid #ff9933;
+    }
+
+    /* HALAMAN SEMBUNYI */
+    .hidden-page {
+      display: none;
+    }
+    
+    .visible-page {
+      display: block;
+    }
+
+    /* MEDIA QUERY SPESIFIK UNTUK HP KECIL */
+    @media (max-width: 360px) {
+      .phoenix-wrapper {
+        padding: 15px 12px;
+      }
+      
+      .circle-logo-wrapper {
+        width: 130px;
+        height: 130px;
+      }
+      
+      .welcome-image {
+        max-width: 250px;
+      }
+      
+      .schedule-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 3px;
+      }
+      
+      .schedule-item i {
+        display: none;
+      }
+      
+      .day {
+        min-width: auto;
+      }
+    }
+
+    /* LANDSCAPE HP */
+    @media (max-height: 500px) and (orientation: landscape) {
+      body {
+        padding: 5px;
+      }
+      
+      .phoenix-wrapper {
+        max-width: 90%;
+        padding: 12px 15px;
+        margin: 10px auto;
+      }
+      
+      .phoenix-header {
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      
+      .circle-logo-wrapper {
+        width: 80px;
+        height: 80px;
+      }
+      
+      .welcome-image {
+        max-width: 200px;
+      }
+      
+      .input-group {
+        margin-bottom: 10px;
+      }
+      
+      .extra-content {
+        margin-top: 15px;
+        padding: 10px;
+      }
+    }
+
+    /* TABLET */
+    @media (min-width: 600px) and (max-width: 900px) {
+      .phoenix-wrapper {
+        max-width: 550px;
+      }
+      
+      .circle-logo-wrapper {
+        width: 180px;
+        height: 180px;
+      }
+    }
+
+    /* LAPTOP DAN DESKTOP */
+    @media (min-width: 901px) {
+      .phoenix-wrapper {
+        max-width: 550px;
+      }
+      
+      .circle-logo-wrapper {
+        width: 200px;
+        height: 200px;
+      }
     }
   </style>
-  <style>body { box-sizing: border-box; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
- </head>
- <body class="h-full">
-  <div id="app-container" class="h-full w-full overflow-auto" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);">
-   <!-- Decorative Background Elements -->
-   <div class="absolute inset-0 overflow-hidden pointer-events-none">
-    <div class="absolute top-20 left-10 w-64 h-64 rounded-full opacity-30" style="background: radial-gradient(circle, #6366f1 0%, transparent 70%);"></div>
-    <div class="absolute bottom-20 right-10 w-80 h-80 rounded-full opacity-20" style="background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);"></div>
-    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full opacity-10" style="background: radial-gradient(circle, #a855f7 0%, transparent 70%);"></div>
-   </div><!-- Main Content -->
-   <div class="relative z-10 min-h-full flex flex-col items-center justify-center px-6 py-12">
-    <!-- Illustration -->
-    <div class="float-animation mb-8 fade-in-up">
-     <div class="relative">
-      <!-- Pulse Ring -->
-      <div class="absolute inset-0 flex items-center justify-center">
-       <div class="w-48 h-48 rounded-full pulse-ring" style="background: rgba(99, 102, 241, 0.1); border: 2px solid rgba(99, 102, 241, 0.2);"></div>
-      </div><!-- Main Icon Container -->
-      <div class="relative w-40 h-40 rounded-3xl flex items-center justify-center shadow-2xl" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
-       <!-- Document Icon -->
-       <svg width="80" height="80" viewbox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="16" y="8" width="48" height="64" rx="4" fill="white" fill-opacity="0.9" /> <rect x="24" y="24" width="32" height="4" rx="2" fill="#c7d2fe" /> <rect x="24" y="34" width="24" height="4" rx="2" fill="#c7d2fe" /> <rect x="24" y="44" width="28" height="4" rx="2" fill="#c7d2fe" /> <rect x="24" y="54" width="20" height="4" rx="2" fill="#c7d2fe" /> <!-- Empty indicator --> <circle cx="56" cy="16" r="10" fill="#fbbf24" /> <rect x="54" y="11" width="4" height="6" rx="1" fill="white" /> <circle cx="56" cy="20" r="1.5" fill="white" />
-       </svg>
-      </div>
-     </div>
-    </div><!-- Text Content -->
-    <div class="text-center max-w-lg">
-     <h1 id="page-title" class="text-3xl md:text-4xl font-bold mb-4 fade-in-up-delay-1" style="color: #1e293b;">Halaman Belum Tersedia</h1>
-     <p id="message-text" class="text-lg md:text-xl mb-3 fade-in-up-delay-1" style="color: #475569;">Konten untuk halaman ini belum diisi oleh admin.</p>
-     <p id="sub-message" class="text-base mb-8 fade-in-up-delay-2" style="color: #64748b;">Silakan kembali lagi nanti atau hubungi administrator untuk informasi lebih lanjut.</p><!-- Status Badge -->
-     <div class="inline-flex items-center gap-2 px-5 py-3 rounded-full fade-in-up-delay-2" style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2);">
-      <span class="relative flex h-3 w-3"> <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background-color: #fbbf24;"></span> <span class="relative inline-flex rounded-full h-3 w-3" style="background-color: #fbbf24;"></span> </span> <span class="text-sm font-medium" style="color: #6366f1;">Menunggu konten dari Admin</span>
-     </div>
-    </div><!-- Decorative Elements -->
-    <div class="mt-12 flex items-center gap-3 fade-in-up-delay-2">
-     <div class="w-2 h-2 rounded-full" style="background-color: #6366f1;"></div>
-     <div class="w-2 h-2 rounded-full" style="background-color: #8b5cf6;"></div>
-     <div class="w-2 h-2 rounded-full" style="background-color: #a855f7;"></div>
-    </div>
-   </div><!-- Footer -->
-   <div class="relative z-10 text-center pb-6">
-    <p class="text-sm" style="color: #94a3b8;">© 2026 • Halaman dalam pengembangan</p>
-   </div>
+</head>
+<body>
+
+  <!-- SCREENSHOT DETECTION OVERLAY -->
+  <div id="screenshotOverlay" class="screenshot-overlay">
+    <i class="fas fa-ban"></i>
+    <h1>⚠️ TERDETEKSI SCREENSHOT ⚠️</h1>
+    <p>Maaf, tangkapan layar tidak diizinkan pada halaman ini demi keamanan konten Phoenix Taekwondo Family.</p>
+    <p style="margin-top: 15px; font-size: 0.9rem;">🔥 Layar akan kembali normal dalam beberapa detik 🔥</p>
   </div>
+
+  <!-- BLOCKER IPHONE -->
+  <div class="iphone-blocker" id="iphoneBlocker">
+    <div class="blocker-content">
+      <i class="fas fa-ban"></i>
+      <i class="fas fa-fire"></i>
+      <h1>PHOENIX<br>MENOLAK IPHONE</h1>
+      <p>Api suci tidak menyala di perangkat ini 🔥<br>Gunakan Android, Windows, atau Mac.</p>
+    </div>
+  </div>
+
+  <canvas id="phoenixCanvas"></canvas>
+  <div class="dark-overlay"></div>
+
+  <div id="emberContainer"></div>
+
+  <!-- sayap kiri kanan background -->
+  <div class="feather-glow" style="left: -30px; bottom: 0;"></div>
+  <div class="feather-glow" style="right: -30px; bottom: 0;"></div>
+
+  <!-- ========== HALAMAN LOGIN ========== -->
+  <div id="loginPage" class="phoenix-wrapper visible-page">
+    <div class="phoenix-header">
+      
+      <!-- GAMBAR SELAMAT DATANG -->
+      <div class="welcome-image-container">
+        <img class="welcome-image" 
+             src="https://phoenix-taekwondo-family.vercel.app/Foto/SELAMAT%20DATANG.svg" 
+             alt="Selamat Datang"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div style="display: none; color: #ffaa66; font-size: 0.9rem; text-align: center; padding: 10px; background: rgba(255,100,0,0.2); border-radius: 20px;">
+          Gambar "SELAMAT DATANG" tidak ditemukan<br>silakan periksa URL
+        </div>
+      </div>
+      
+      <!-- LOGO LINGKARAN -->
+      <div class="logo-container">
+        <div class="circle-logo-wrapper">
+          <div class="circle-logo">
+            <img src="https://phoenix-taekwondo-family.vercel.app/Foto/PHOENIX%20TAEKWONDO%20FAMILY.svg" 
+                 alt="Phoenix Taekwondo Family Logo"
+                 onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=color:#ffaa66;font-size:0.8rem;>Logo tidak ditemukan</span>';">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form action="#" method="post" id="loginForm">
+      <div class="input-group">
+        <i class="fas fa-envelope"></i>
+        <input type="email" placeholder="Masukkan EMAIL" required>
+      </div>
+
+      <!-- PASSWORD GROUP DENGAN SHOW/HIDE DI POJOK KANAN -->
+      <div class="input-group password-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" placeholder="Masukkan PASSWORD" id="passwordField" required>
+        <i class="fas fa-eye password-toggle" id="togglePassword"></i>
+      </div>
+
+      <div class="ember-line">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+
+      <!-- LINK LUPA PASSWORD -->
+      <div class="phoenix-extras">
+        <a href="#" class="forgot-phoenix" id="forgotPasswordLink"><i class="fa-regular fa-fire-flame-curved"></i> lupa password?</a>
+      </div>
+
+      <button type="submit" class="phoenix-btn">
+        REBIRTH
+      </button>
+    </form>
+
+    <!-- REGISTER PROMPT DENGAN LINK WHATSAPP -->
+    <div class="register-prompt">
+      <i class="fas fa-feather"></i>
+      Belum punya akun? <a href="https://wa.me/628124587945" target="_blank" rel="noopener noreferrer">Daftar sekarang</a>
+      <i class="fas fa-feather"></i>
+    </div>
+
+    <!-- KONTEN TENTANG PHOENIX TAEKWONDO FAMILY -->
+    <div class="extra-content">
+      <h3><i class="fas fa-feather"></i> TENTANG PHOENIX TAEKWONDO FAMILY <i class="fas fa-feather"></i></h3>
+      <div class="about-text">
+        <p>Phoenix Taekwondo Family adalah komunitas bela diri yang mengajarkan nilai-nilai disiplin, hormat, dan semangat pantang menyerah. Seperti burung phoenix yang bangkit dari api, setiap anggota dilatih untuk bangkit dari setiap tantangan.</p>
+        <div class="quote">
+          <i class="fas fa-fire"></i> "Bangkit dari api, terbang lebih tinggi" <i class="fas fa-fire"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- JADWAL LATIHAN -->
+    <div class="extra-content" style="margin-top: 15px;">
+      <h3><i class="fas fa-clock"></i> JADWAL LATIHAN <i class="fas fa-clock"></i></h3>
+      
+      <div class="schedule-school">
+        <i class="fas fa-school"></i> SMA NEGERI 1 KOTA SORONG
+      </div>
+      <div class="schedule-days">
+        <div class="schedule-item">
+          <i class="fas fa-calendar-alt"></i>
+          <span class="day">Selasa</span>
+          <span class="time">15.30-17.30 <span class="wit-badge">WIT</span></span>
+        </div>
+        <div class="schedule-item">
+          <i class="fas fa-calendar-alt"></i>
+          <span class="day">Jumat</span>
+          <span class="time">15.00-17.00 <span class="wit-badge">WIT</span></span>
+        </div>
+      </div>
+      
+      <div class="schedule-school">
+        <i class="fas fa-school"></i> SMP NEGERI 1 KOTA SORONG
+      </div>
+      <div class="schedule-days">
+        <div class="schedule-item">
+          <i class="fas fa-calendar-alt"></i>
+          <span class="day">Kamis & Sabtu</span>
+          <span class="time">15.30-17.30 <span class="wit-badge">WIT</span></span>
+        </div>
+      </div>
+      
+      <p style="margin-top: 15px; font-style: italic; color: #ffaa66; border-top: 1px dashed #ff884d; padding-top: 12px; font-size: clamp(0.85rem, 3.5vw, 0.95rem);">
+        <i class="fas fa-fire"></i> Semangat berlatih, bangkit bersama api phoenix!
+      </p>
+    </div>
+  </div>
+
+  <!-- ========== HALAMAN LUPA PASSWORD ========== -->
+  <div id="forgotPasswordPage" class="phoenix-wrapper hidden-page">
+    <div class="phoenix-header">
+      
+      <!-- GAMBAR SELAMAT DATANG (TETAP) -->
+      <div class="welcome-image-container">
+        <img class="welcome-image" 
+             src="https://phoenix-taekwondo-family.vercel.app/Foto/SELAMAT%20DATANG.svg" 
+             alt="Selamat Datang"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div style="display: none; color: #ffaa66; font-size: 0.9rem; text-align: center; padding: 10px; background: rgba(255,100,0,0.2); border-radius: 20px;">
+          Gambar "SELAMAT DATANG" tidak ditemukan
+        </div>
+      </div>
+      
+      <!-- LOGO LINGKARAN (TETAP) -->
+      <div class="logo-container">
+        <div class="circle-logo-wrapper">
+          <div class="circle-logo">
+            <img src="https://phoenix-taekwondo-family.vercel.app/Foto/PHOENIX%20TAEKWONDO%20FAMILY.svg" 
+                 alt="Phoenix Taekwondo Family Logo"
+                 onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=color:#ffaa66;font-size:0.8rem;>Logo tidak ditemukan</span>';">
+          </div>
+        </div>
+      </div>
+      
+      <!-- JUDUL HALAMAN -->
+      <div class="page-title">
+        <i class="fas fa-fire"></i> LUPA PASSWORD <i class="fas fa-fire"></i>
+      </div>
+    </div>
+
+    <form action="#" method="post" id="forgotPasswordForm">
+      <!-- INPUT EMAIL -->
+      <div class="input-group">
+        <i class="fas fa-envelope"></i>
+        <input type="email" placeholder="Masukkan EMAIL" required>
+      </div>
+
+      <!-- INPUT NOMOR WHATSAPP -->
+      <div class="input-group">
+        <i class="fab fa-whatsapp"></i>
+        <input type="tel" placeholder="Masukkan Nomor WhatsApp" required>
+      </div>
+
+      <div class="ember-line">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+
+      <!-- TOMBOL KIRIM -->
+      <button type="submit" class="phoenix-btn small">
+        KIRIM
+      </button>
+      
+      <!-- LINK KEMBALI KE LOGIN -->
+      <div class="phoenix-extras center" style="margin-top: 20px;">
+        <a href="#" class="back-to-login" id="backToLoginLink"><i class="fas fa-arrow-left"></i> Kembali ke Login</a>
+      </div>
+    </form>
+  </div>
+
   <script>
-    const defaultConfig = {
-      page_title: 'Halaman Belum Tersedia',
-      message_text: 'Konten untuk halaman ini belum diisi oleh admin.',
-      sub_message: 'Silakan kembali lagi nanti atau hubungi administrator untuk informasi lebih lanjut.',
-      primary_color: '#6366f1',
-      secondary_color: '#8b5cf6',
-      text_color: '#1e293b',
-      background_color: '#f8fafc',
-      accent_color: '#fbbf24',
-      font_family: 'Plus Jakarta Sans',
-      font_size: 16
-    };
-
-    async function onConfigChange(config) {
-      const pageTitle = document.getElementById('page-title');
-      const messageText = document.getElementById('message-text');
-      const subMessage = document.getElementById('sub-message');
-
-      if (pageTitle) {
-        pageTitle.textContent = config.page_title || defaultConfig.page_title;
-        pageTitle.style.color = config.text_color || defaultConfig.text_color;
-        pageTitle.style.fontFamily = `${config.font_family || defaultConfig.font_family}, sans-serif`;
-        const baseSize = config.font_size || defaultConfig.font_size;
-        pageTitle.style.fontSize = `${baseSize * 2}px`;
-      }
-
-      if (messageText) {
-        messageText.textContent = config.message_text || defaultConfig.message_text;
-        messageText.style.fontFamily = `${config.font_family || defaultConfig.font_family}, sans-serif`;
-        const baseSize = config.font_size || defaultConfig.font_size;
-        messageText.style.fontSize = `${baseSize * 1.25}px`;
-      }
-
-      if (subMessage) {
-        subMessage.textContent = config.sub_message || defaultConfig.sub_message;
-        subMessage.style.fontFamily = `${config.font_family || defaultConfig.font_family}, sans-serif`;
-        const baseSize = config.font_size || defaultConfig.font_size;
-        subMessage.style.fontSize = `${baseSize}px`;
-      }
-    }
-
-    function mapToCapabilities(config) {
-      return {
-        recolorables: [
-          {
-            get: () => config.background_color || defaultConfig.background_color,
-            set: (value) => {
-              config.background_color = value;
-              window.elementSdk.setConfig({ background_color: value });
-            }
-          },
-          {
-            get: () => config.text_color || defaultConfig.text_color,
-            set: (value) => {
-              config.text_color = value;
-              window.elementSdk.setConfig({ text_color: value });
-            }
-          },
-          {
-            get: () => config.primary_color || defaultConfig.primary_color,
-            set: (value) => {
-              config.primary_color = value;
-              window.elementSdk.setConfig({ primary_color: value });
-            }
-          },
-          {
-            get: () => config.accent_color || defaultConfig.accent_color,
-            set: (value) => {
-              config.accent_color = value;
-              window.elementSdk.setConfig({ accent_color: value });
-            }
-          }
-        ],
-        borderables: [],
-        fontEditable: {
-          get: () => config.font_family || defaultConfig.font_family,
-          set: (value) => {
-            config.font_family = value;
-            window.elementSdk.setConfig({ font_family: value });
-          }
-        },
-        fontSizeable: {
-          get: () => config.font_size || defaultConfig.font_size,
-          set: (value) => {
-            config.font_size = value;
-            window.elementSdk.setConfig({ font_size: value });
+    (function() {
+      // ========== PROTEKSI INSPECT, KLIK KANAN, COPY ==========
+      
+      // Cegah klik kanan
+      document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        return false;
+      });
+      
+      // Cegah shortcut inspect element
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || 
+            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j')) ||
+            (e.ctrlKey && (e.key === 'U' || e.key === 'u')) ||
+            (e.ctrlKey && (e.key === 'S' || e.key === 's'))) {
+          e.preventDefault();
+          return false;
+        }
+        
+        if (e.ctrlKey && (e.key === 'C' || e.key === 'c')) {
+          if (!(document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) {
+            e.preventDefault();
+            return false;
           }
         }
-      };
-    }
-
-    function mapToEditPanelValues(config) {
-      return new Map([
-        ['page_title', config.page_title || defaultConfig.page_title],
-        ['message_text', config.message_text || defaultConfig.message_text],
-        ['sub_message', config.sub_message || defaultConfig.sub_message]
-      ]);
-    }
-
-    if (window.elementSdk) {
-      window.elementSdk.init({
-        defaultConfig,
-        onConfigChange,
-        mapToCapabilities,
-        mapToEditPanelValues
       });
-    }
+      
+      // Cegah seleksi teks (kecuali di input)
+      document.addEventListener('selectstart', function(e) {
+        if (!(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+          e.preventDefault();
+          return false;
+        }
+      });
+      
+      // Cegah drag
+      document.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+        return false;
+      });
+      
+      // Cegah copy untuk elemen non-input
+      document.addEventListener('copy', function(e) {
+        if (!(document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) {
+          e.preventDefault();
+          return false;
+        }
+      });
+      
+      // Deteksi DevTools
+      setInterval(function() {
+        const widthThreshold = window.outerWidth - window.innerWidth > 160;
+        const heightThreshold = window.outerHeight - window.innerHeight > 160;
+        
+        if (widthThreshold || heightThreshold) {
+          document.body.innerHTML = '<div style="position:fixed; top:0; left:0; width:100%; height:100%; background:black; color:#ff4400; display:flex; align-items:center; justify-content:center; font-family:Cinzel; text-align:center; padding:20px;"><h1>🚫 DevTools terdeteksi! Halaman ini dilindungi.</h1></div>';
+        }
+      }, 1000);
+      
+      // ========== DETEKSI SCREENSHOT ==========
+      const screenshotOverlay = document.getElementById('screenshotOverlay');
+      let screenshotTimer = null;
+      
+      function showScreenshotWarning() {
+        if (screenshotOverlay) {
+          screenshotOverlay.style.display = 'flex';
+          
+          if (screenshotTimer) clearTimeout(screenshotTimer);
+          screenshotTimer = setTimeout(function() {
+            screenshotOverlay.style.display = 'none';
+          }, 3000);
+        }
+      }
+      
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'PrintScreen' || e.code === 'PrintScreen' ||
+            (e.metaKey && e.shiftKey && e.key === 's') ||
+            (e.ctrlKey && e.shiftKey && e.key === 's') ||
+            (e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4' || e.key === '5'))) {
+          showScreenshotWarning();
+          e.preventDefault();
+          return false;
+        }
+      });
+      
+      document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+          sessionStorage.setItem('screenshot_risk', 'true');
+        } else {
+          if (sessionStorage.getItem('screenshot_risk') === 'true') {
+            showScreenshotWarning();
+            sessionStorage.removeItem('screenshot_risk');
+          }
+        }
+      });
+      
+      // ========== BLOKIR IPHONE ==========
+      function isiPhone() {
+        return /iPhone/.test(navigator.userAgent) && !/iPad/.test(navigator.userAgent);
+      }
+
+      window.addEventListener('load', function() {
+        const blocker = document.getElementById('iphoneBlocker');
+        if (isiPhone()) {
+          blocker.classList.add('show');
+          document.body.style.overflow = 'hidden';
+        } else {
+          blocker.style.display = 'none';
+        }
+      });
+
+      // ========== SHOW/HIDE PASSWORD ==========
+      const togglePassword = document.getElementById('togglePassword');
+      const passwordField = document.getElementById('passwordField');
+      
+      if (togglePassword && passwordField) {
+        function togglePasswordVisibility() {
+          const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+          passwordField.setAttribute('type', type);
+          togglePassword.classList.toggle('fa-eye');
+          togglePassword.classList.toggle('fa-eye-slash');
+          passwordField.focus();
+        }
+        
+        togglePassword.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          togglePasswordVisibility();
+        });
+      }
+
+      // ========== SWITCH ANTARA HALAMAN ==========
+      const loginPage = document.getElementById('loginPage');
+      const forgotPage = document.getElementById('forgotPasswordPage');
+      const forgotLink = document.getElementById('forgotPasswordLink');
+      const backLink = document.getElementById('backToLoginLink');
+      
+      if (forgotLink) {
+        forgotLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          loginPage.classList.remove('visible-page');
+          loginPage.classList.add('hidden-page');
+          forgotPage.classList.remove('hidden-page');
+          forgotPage.classList.add('visible-page');
+          window.scrollTo(0, 0);
+        });
+      }
+      
+      if (backLink) {
+        backLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          forgotPage.classList.remove('visible-page');
+          forgotPage.classList.add('hidden-page');
+          loginPage.classList.remove('hidden-page');
+          loginPage.classList.add('visible-page');
+          window.scrollTo(0, 0);
+        });
+      }
+
+      // ========== CANVAS PHOENIX ==========
+      const canvas = document.getElementById('phoenixCanvas');
+      const ctx = canvas.getContext('2d');
+      let width, height;
+
+      let particles = [];
+      const PARTICLE_COUNT = 100;
+
+      function initCanvas() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+
+        particles = [];
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          const isFeather = i % 4 === 0;
+          particles.push({
+            x: Math.random() * width,
+            y: height * 0.6 + Math.random() * height * 0.3,
+            size: isFeather ? Math.random() * 25 + 10 : Math.random() * 10 + 3,
+            speedY: Math.random() * 1.2 + 0.4,
+            speedX: (Math.random() - 0.5) * 0.6,
+            opacity: Math.random() * 0.4 + 0.2,
+            isFeather: isFeather,
+            angle: Math.random() * Math.PI * 2,
+          });
+        }
+      }
+
+      function drawPhoenix() {
+        ctx.clearRect(0, 0, width, height);
+
+        ctx.save();
+        ctx.filter = 'blur(15px)';
+        ctx.globalAlpha = 0.15;
+        ctx.fillStyle = '#ff7700';
+        ctx.beginPath();
+        ctx.moveTo(0, height*0.7);
+        ctx.quadraticCurveTo(width*0.3, height*0.3, width*0.2, height*0.1);
+        ctx.lineTo(width*0.1, height*0.3);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(width, height*0.7);
+        ctx.quadraticCurveTo(width*0.7, height*0.3, width*0.8, height*0.1);
+        ctx.lineTo(width*0.9, height*0.3);
+        ctx.fill();
+        ctx.restore();
+
+        for (let p of particles) {
+          p.y -= p.speedY;
+          p.x += p.speedX * 0.5 + Math.sin(Date.now() * 0.002 + p.y) * 0.1;
+
+          if (p.y + p.size < 0 || p.x < -30 || p.x > width + 30) {
+            p.y = height - Math.random() * height * 0.3;
+            p.x = Math.random() * width;
+            p.size = p.isFeather ? Math.random() * 25 + 12 : Math.random() * 10 + 4;
+            p.opacity = Math.random() * 0.3 + 0.2;
+          }
+
+          let flicker = 0.7 + 0.3 * Math.sin(Date.now() * 0.008 + p.x);
+
+          if (!p.isFeather) {
+            ctx.beginPath();
+            let grad = ctx.createRadialGradient(p.x-3, p.y-3, p.size*0.2, p.x, p.y, p.size*1.2);
+            grad.addColorStop(0, `rgba(255, 200, 100, ${p.opacity * flicker})`);
+            grad.addColorStop(0.6, `rgba(255, 80, 0, ${p.opacity * 0.7})`);
+            grad.addColorStop(1, 'rgba(150, 20, 0, 0)');
+            ctx.fillStyle = grad;
+            ctx.arc(p.x, p.y, p.size * 1.1, 0, Math.PI*2);
+            ctx.fill();
+          } else {
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.angle + Date.now() * 0.001);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.quadraticCurveTo(p.size*0.7, -p.size*0.4, p.size*1.2, -p.size*0.7);
+            ctx.lineTo(p.size*0.8, -p.size*0.4);
+            ctx.closePath();
+            let fGrad = ctx.createLinearGradient(0, 0, p.size, -p.size);
+            fGrad.addColorStop(0, `rgba(255, 170, 70, ${p.opacity})`);
+            fGrad.addColorStop(1, `rgba(255, 60, 0, ${p.opacity*0.6})`);
+            ctx.fillStyle = fGrad;
+            ctx.shadowColor = '#ffaa33';
+            ctx.shadowBlur = 10;
+            ctx.fill();
+            ctx.restore();
+          }
+        }
+        requestAnimationFrame(drawPhoenix);
+      }
+
+      const emberContainer = document.getElementById('emberContainer');
+      const EMBER_COUNT = 25;
+
+      function createEmbers() {
+        for (let i = 0; i < EMBER_COUNT; i++) {
+          const ember = document.createElement('div');
+          ember.className = 'ember';
+          ember.style.width = (Math.random() * 10 + 2) + 'px';
+          ember.style.height = ember.style.width;
+          ember.style.left = Math.random() * 100 + '%';
+          ember.style.bottom = '0px';
+          emberContainer.appendChild(ember);
+          
+          animateEmber(ember);
+        }
+      }
+
+      function animateEmber(el) {
+        let x = parseFloat(el.style.left) / 100 * window.innerWidth;
+        let y = window.innerHeight - 15;
+        let speedY = Math.random() * 1.8 + 1;
+        let speedX = (Math.random() - 0.5) * 0.8;
+        let opacity = 0.7;
+
+        function move() {
+          y -= speedY;
+          x += speedX + (Math.random() - 0.5) * 0.2;
+
+          if (y < window.innerHeight * 0.2) opacity -= 0.01;
+          if (opacity <= 0.02 || y < -20 || x < -20 || x > window.innerWidth + 20) {
+            y = window.innerHeight - 20 - Math.random() * 40;
+            x = Math.random() * window.innerWidth;
+            opacity = 0.5 + Math.random() * 0.3;
+            speedY = Math.random() * 1.8 + 1;
+          }
+
+          el.style.transform = `translate(${x}px, ${-window.innerHeight + y}px) scale(${0.6 + Math.random()*0.4})`;
+          el.style.opacity = opacity;
+
+          requestAnimationFrame(move);
+        }
+        requestAnimationFrame(move);
+      }
+
+      window.addEventListener('resize', function() {
+        initCanvas();
+      });
+
+      initCanvas();
+      drawPhoenix();
+      createEmbers();
+
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('🔥 Login berhasil! (Demo)');
+      });
+      
+      document.getElementById('forgotPasswordForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('📱 Permintaan reset password telah dikirim! (Demo)');
+      });
+
+    })();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9da9619b26650f23',t:'MTc3MzIxOTc1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+
+  <!-- fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+</body>
 </html>
