@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <!-- Mencegah Google Translate -->
+  <meta name="google" content="notranslate">
+  <meta name="google-translate-customization" content="notranslate">
+  <meta name="robots" content="noindex, nofollow">
   
   <!-- JUDUL TAB WEB -->
   <title>PHOENIX TAEKWONDO FAMILY</title>
@@ -36,6 +40,13 @@
       -moz-user-select: text;
       -ms-user-select: text;
       user-select: text;
+      text-transform: none; /* Pastikan tidak ada transformasi huruf */
+    }
+    
+    /* Mencegah terjemahan otomatis */
+    body, .phoenix-wrapper, .phoenix-header, .input-group, .extra-content {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
     }
 
     body {
@@ -340,6 +351,7 @@
       transition: 0.25s;
       box-shadow: 0 0 10px #ff55005e;
       -webkit-appearance: none;
+      text-transform: none; /* Memastikan huruf bisa besar dan kecil */
     }
 
     .input-group input:focus {
@@ -351,6 +363,7 @@
     .input-group input::placeholder {
       color: #c08a5a;
       font-size: clamp(0.85rem, 3vw, 0.95rem);
+      text-transform: none;
     }
 
     /* KHUSUS UNTUK PASSWORD GROUP */
@@ -438,7 +451,7 @@
       border-bottom: 2px dotted #ff9933;
     }
 
-    /* TOMBOL UTAMA */
+    /* TOMBOL LOGIN */
     .phoenix-btn {
       width: 100%;
       background: linear-gradient(135deg, #b34700, #ff6600, #ff9933);
@@ -810,8 +823,9 @@
         <a href="#" class="forgot-phoenix" id="forgotPasswordLink"><i class="fa-regular fa-fire-flame-curved"></i> lupa password?</a>
       </div>
 
+      <!-- TOMBOL LOGIN -->
       <button type="submit" class="phoenix-btn">
-        REBIRTH
+        LOGIN
       </button>
     </form>
 
@@ -933,6 +947,24 @@
 
   <script>
     (function() {
+      // ========== MENCEGAH GOOGLE TRANSLATE ==========
+      // Menambahkan atribut untuk mencegah terjemahan otomatis
+      document.documentElement.setAttribute('translate', 'no');
+      document.body.setAttribute('translate', 'no');
+      
+      // Menonaktifkan fitur translate Chrome
+      if (typeof chrome !== 'undefined' && chrome.translate) {
+        chrome.translate = null;
+      }
+      
+      // Mencegah popup translate
+      document.addEventListener('DOMContentLoaded', function() {
+        const meta = document.createElement('meta');
+        meta.name = 'google';
+        meta.content = 'notranslate';
+        document.head.appendChild(meta);
+      });
+      
       // ========== PROTEKSI INSPECT, KLIK KANAN, COPY ==========
       
       // Cegah klik kanan
