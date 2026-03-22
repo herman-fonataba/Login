@@ -1,4 +1,7 @@
 (function() {
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzHERE_YOUR_DEPLOYMENT_ID/exec';
+      // ===================================================
+      
       // ========== MENCEGAH GOOGLE TRANSLATE ==========
       document.documentElement.setAttribute('translate', 'no');
       document.body.setAttribute('translate', 'no');
@@ -13,6 +16,20 @@
         meta.content = 'notranslate';
         document.head.appendChild(meta);
       });
+      
+      // ========== NOTIFICATION FUNCTION ==========
+      function showNotification(message, isSuccess = true) {
+        const notification = document.getElementById('notification');
+        const messageSpan = document.getElementById('notificationMessage');
+        
+        notification.className = 'notification ' + (isSuccess ? 'success' : 'error');
+        messageSpan.innerHTML = message;
+        notification.style.display = 'flex';
+        
+        setTimeout(() => {
+          notification.style.display = 'none';
+        }, 4000);
+      }
       
       // ========== PROTEKSI INSPECT, KLIK KANAN, COPY ==========
       
@@ -57,6 +74,7 @@
         }
       });
       
+      // Deteksi DevTools
       setInterval(function() {
         const widthThreshold = window.outerWidth - window.innerWidth > 160;
         const heightThreshold = window.outerHeight - window.innerHeight > 160;
@@ -163,6 +181,77 @@
           loginPage.classList.remove('hidden-page');
           loginPage.classList.add('visible-page');
           window.scrollTo(0, 0);
+        });
+      }
+
+      // ========== SUBMIT LUPA PASSWORD KE GOOGLE SHEETS ==========
+      const forgotForm = document.getElementById('forgotPasswordForm');
+      const sendBtn = document.getElementById('sendResetBtn');
+      
+      if (forgotForm) {
+        forgotForm.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          
+          const email = document.getElementById('resetEmail').value.trim();
+          const phone = document.getElementById('resetPhone').value.trim();
+          
+          if (!email || !phone) {
+            showNotification('Mohon isi Email dan Nomor WhatsApp!', false);
+            return;
+          }
+          
+          // Validasi email sederhana
+          const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            showNotification('Format Email tidak valid!', false);
+            return;
+          }
+          
+          // Validasi nomor WhatsApp (minimal 10 digit)
+          const phoneClean = phone.replace(/[^0-9]/g, '');
+          if (phoneClean.length < 10) {
+            showNotification('Nomor WhatsApp tidak valid (minimal 10 digit)!', false);
+            return;
+          }
+          
+          // Tampilkan loading pada tombol
+          const originalText = sendBtn.innerHTML;
+          sendBtn.innerHTML = 'MENGIRIM... <span class="loading"></span>';
+          sendBtn.disabled = true;
+          
+          try {
+            // Kirim data ke Google Apps Script
+            const response = await fetch(SCRIPT_URL, {
+              method: 'POST',
+              mode: 'no-cors', // Mengatasi CORS
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: new URLSearchParams({
+                email: email,
+                phone: phone,
+                timestamp: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jayapura' })
+              })
+            });
+            
+            // Karena mode no-cors, response tidak bisa dibaca
+            // Tampilkan sukses setelah delay
+            setTimeout(() => {
+              showNotification('✅ Permintaan reset password telah dikirim! Admin akan menghubungi Anda.', true);
+              // Reset form
+              document.getElementById('resetEmail').value = '';
+              document.getElementById('resetPhone').value = '';
+            }, 1000);
+            
+          } catch (error) {
+            console.error('Error:', error);
+            showNotification('❌ Gagal mengirim permintaan. Silakan coba lagi.', false);
+          } finally {
+            setTimeout(() => {
+              sendBtn.innerHTML = originalText;
+              sendBtn.disabled = false;
+            }, 2000);
+          }
         });
       }
 
@@ -311,14 +400,10 @@
       drawPhoenix();
       createEmbers();
 
+      // CEK FORM LOGIN (DEMO)
       document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        alert('🔥 Login berhasil! (Demo)');
-      });
-      
-      document.getElementById('forgotPasswordForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('📱 Permintaan reset password telah dikirim! (Demo)');
+        showNotification('🔥 Login berhasil! (Demo)', true);
       });
 
     })();
