@@ -407,3 +407,33 @@
       });
 
     })();
+
+if (typeof showNotification === 'undefined') {
+      window.showNotification = function(message, isSuccess = true) {
+        const notification = document.getElementById('notification');
+        const messageSpan = document.getElementById('notificationMessage');
+        if (notification && messageSpan) {
+          notification.className = 'notification ' + (isSuccess ? 'success' : 'error');
+          messageSpan.innerHTML = message;
+          notification.style.display = 'flex';
+          setTimeout(() => {
+            notification.style.display = 'none';
+          }, 4000);
+        } else {
+          alert(message);
+        }
+      };
+    }
+    
+    // Fallback untuk loading indicator jika belum ada di JavaScript.js
+    if (typeof showLoading === 'undefined') {
+      window.showLoading = function(btn, isLoading, originalText) {
+        if (isLoading) {
+          btn.innerHTML = 'MENGIRIM... <span class="loading"></span>';
+          btn.disabled = true;
+        } else {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }
+      };
+    }
