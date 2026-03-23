@@ -1,7 +1,7 @@
 (function() {
       // ========== GOOGLE SHEETS CONFIGURATION ==========
       // GANTI URL INI DENGAN LINK DEPLOYMENT APPS SCRIPT ANDA
-      const SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
+      window.SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
       
       // ========== NOTIFICATION FUNCTION ==========
       function showNotification(message, isSuccess = true) {
