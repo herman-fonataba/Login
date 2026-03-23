@@ -1,4 +1,4 @@
-(function() {
+    (function() {
       // ========== MENCEGAH GOOGLE TRANSLATE ==========
       document.documentElement.setAttribute('translate', 'no');
       document.body.setAttribute('translate', 'no');
@@ -13,20 +13,6 @@
         meta.content = 'notranslate';
         document.head.appendChild(meta);
       });
-      
-      // ========== NOTIFICATION FUNCTION ==========
-      function showNotification(message, isSuccess = true) {
-        const notification = document.getElementById('notification');
-        const messageSpan = document.getElementById('notificationMessage');
-        
-        notification.className = 'notification ' + (isSuccess ? 'success' : 'error');
-        messageSpan.innerHTML = message;
-        notification.style.display = 'flex';
-        
-        setTimeout(() => {
-          notification.style.display = 'none';
-        }, 4000);
-      }
       
       // ========== PROTEKSI INSPECT, KLIK KANAN, COPY ==========
       
@@ -71,7 +57,6 @@
         }
       });
       
-      // Deteksi DevTools
       setInterval(function() {
         const widthThreshold = window.outerWidth - window.innerWidth > 160;
         const heightThreshold = window.outerHeight - window.innerHeight > 160;
@@ -326,40 +311,14 @@
       drawPhoenix();
       createEmbers();
 
-      // CEK FORM LOGIN (DEMO)
       document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        showNotification('🔥 Login berhasil! (Demo)', true);
+        alert('🔥 Login berhasil! (Demo)');
+      });
+      
+      document.getElementById('forgotPasswordForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('📱 Permintaan reset password telah dikirim! (Demo)');
       });
 
     })();
-
-if (typeof showNotification === 'undefined') {
-      window.showNotification = function(message, isSuccess = true) {
-        const notification = document.getElementById('notification');
-        const messageSpan = document.getElementById('notificationMessage');
-        if (notification && messageSpan) {
-          notification.className = 'notification ' + (isSuccess ? 'success' : 'error');
-          messageSpan.innerHTML = message;
-          notification.style.display = 'flex';
-          setTimeout(() => {
-            notification.style.display = 'none';
-          }, 4000);
-        } else {
-          alert(message);
-        }
-      };
-    }
-    
-    // Fallback untuk loading indicator jika belum ada di JavaScript.js
-    if (typeof showLoading === 'undefined') {
-      window.showLoading = function(btn, isLoading, originalText) {
-        if (isLoading) {
-          btn.innerHTML = 'MENGIRIM... <span class="loading"></span>';
-          btn.disabled = true;
-        } else {
-          btn.innerHTML = originalText;
-          btn.disabled = false;
-        }
-      };
-    }
