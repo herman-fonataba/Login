@@ -355,3 +355,16 @@
   createEmbers();
 
 })();
+
+// Fungsi format nomor WhatsApp - hanya ubah 628... menjadi 08...
+function formatPhoneNumber(phone) {
+  let cleaned = phone.replace(/\D/g, '');
+  if (!cleaned) return phone;
+  if (cleaned.startsWith('628')) {
+    return '08' + cleaned.substring(3);
+  }
+  return cleaned; // 0812... tetap, 1234567890 tetap
+}
+
+// Di dalam submit, gunakan:
+const formattedPhone = formatPhoneNumber(phone);
