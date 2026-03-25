@@ -440,59 +440,136 @@
 
     })();
 
-/* Penyesuaian untuk halaman lupa password */
-.forgot-password-page .phoenix-wrapper {
-  min-height: auto;
+
+// Cek apakah ini halaman lupa password
+function isForgotPasswordPage() {
+  return window.location.pathname.includes('forgot-password') || 
+         document.getElementById('forgotPasswordForm') !== null;
 }
 
-/* Style tambahan untuk tombol kirim */
-#sendResetBtn {
-  transition: all 0.3s ease;
-}
-
-#sendResetBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 0 #7a2e00, 0 0 40px #ffaa33;
-}
-
-/* Style untuk input saat valid/invalid (opsional) */
-.input-group input:valid {
-  border-color: #4caf50;
-}
-
-.input-group input:invalid {
-  border-color: #ff4444;
-}
-
-/* Efek fokus pada input group */
-.input-group.focused i:not(.password-toggle) {
-  color: #ffdd99;
-  text-shadow: 0 0 20px #ffaa33;
-}
-
-/* Animasi tambahan untuk notifikasi */
-.notification {
-  animation: slideUp 0.3s ease;
-}
-
-/* Responsif untuk halaman lupa password */
-@media (max-width: 480px) {
-  .page-title {
-    font-size: clamp(1.1rem, 5vw, 1.5rem);
+// Fungsi untuk memformat nomor telepon (hanya untuk lupa password)
+function formatPhoneNumber(phone) {
+  // Hapus semua karakter non-digit
+  let cleaned = phone.replace(/\D/g, '');
+  
+  // Jika nomor kosong
+  if (!cleaned) return phone;
+  
+  // Jika nomor dimulai dengan 628, ganti dengan 08
+  if (cleaned.startsWith('628')) {
+    return '08' + cleaned.substring(3);
   }
   
-  .phoenix-btn.small {
-    font-size: clamp(1rem, 5vw, 1.2rem);
-    letter-spacing: 2px;
+  // Jika nomor sudah dimulai dengan 0, biarkan
+  if (cleaned.startsWith('0')) {
+    return cleaned;
   }
+  
+  // Selain itu, kembalikan cleaned
+  return cleaned;
 }
 
-/* Style untuk link kembali ke login */
-.back-to-login {
-  transition: all 0.2s ease;
+// Inisialisasi halaman lupa password
+function initForgotPasswordPage() {
+  const forgotForm = document.getElementById('forgotPasswordForm');
+  const sendBtn = document.getElementById('sendResetBtn');
+  
+  if (!forgotForm || !sendBtn) return;
+  
+  // Auto-fokus ke input email
+  const emailInput = document.getElementById('resetEmail');
+  if (emailInput) emailInput.focus();
+  
+  // Efek animasi saat input mendapatkan fokus
+  const inputs = document.querySelectorAll('.input-group input');
+  inputs.forEach(input => {
+    input.addEventListener('focus', function() {
+      this.parentElement.classList.add('focused');
+    });
+    
+    input.addEventListener('blur', function() {
+      this.parentElement.classList.remove('focused');
+    });
+  });
+  
+  // Submit form lupa password
+  forgotForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const emailInput = document.getElementById('resetEmail');
+    const phoneInput = document.getElementById('resetPhone');
+    
+    let email = emailInput ? emailInput.value.trim() : '';
+    let phone = phoneInput ? phoneInput.value.trim() : '';
+    
+    // Validasi field kosong
+    if (!email || !phone) {
+      showNotification('Mohon isi Email dan Nomor WhatsApp!', false);
+      return;
+    }
+    
+    // Validasi format email
+    const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showNotification('Format Email tidak valid!', false);
+      return;
+    }
+    
+    // Validasi nomor WhatsApp
+    const phoneClean = phone.replace(/\D/g, '');
+    if (phoneClean.length < 10 || phoneClean.length > 13) {
+      showNotification('Nomor WhatsApp tidak valid (minimal 10 digit, maksimal 13 digit)!', false);
+      return;
+    }
+    
+    // Format nomor untuk dikirim
+    const formattedPhone = formatPhoneNumber(phone);
+    
+    // Tampilkan loading
+    const originalText = sendBtn.innerHTML;
+    sendBtn.innerHTML = 'MENGIRIM... <span class="loading"></span>';
+    sendBtn.disabled = true;
+    
+    try {
+      // Kirim data ke Google Sheets
+      await fetch(window.SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          email: email,
+          phone: formattedPhone,
+          timestamp: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jayapura' })
+        })
+      });
+      
+      // Tampilkan notifikasi sukses
+      setTimeout(() => {
+        showNotification('✅ Permintaan reset password telah dikirim! Admin akan menghubungi Anda.', true);
+        
+        // Reset form
+        if (emailInput) emailInput.value = '';
+        if (phoneInput) phoneInput.value = '';
+      }, 500);
+      
+    } catch (error) {
+      console.error('Error:', error);
+      showNotification('❌ Gagal mengirim permintaan. Silakan coba lagi.', false);
+    } finally {
+      setTimeout(() => {
+        sendBtn.innerHTML = originalText;
+        sendBtn.disabled = false;
+      }, 2000);
+    }
+  });
 }
 
-.back-to-login:hover {
-  transform: translateX(-3px);
-  text-shadow: 0 0 10px #ffaa33;
+// Jalankan inisialisasi lupa password jika halaman yang sesuai
+if (isForgotPasswordPage()) {
+  // Tunggu DOM siap
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initForgotPasswordPage);
+  } else {
+    initForgotPasswordPage();
+  }
 }
