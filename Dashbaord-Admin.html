@@ -6,30 +6,27 @@
     <title>Loading...</title>
     
     <script>
-        // ========== PROTEKSI VIEW-SOURCE DENGAN KODE ACAK ==========
+        // ========== PROTEKSI VIEW-SOURCE DENGAN ENKRIPSI ==========
         
-        // Fungsi untuk generate kode acak
-        function generateRandomCode() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
-            let result = '';
-            for (let i = 0; i < 5000; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return result;
-        }
-        
-        // Cek apakah ini view-source
+        // Cek view-source
         if (window.location.protocol === 'view-source:' || 
-            window.location.href.indexOf('view-source:') === 0 ||
-            document.documentURI.indexOf('view-source:') === 0) {
+            window.location.href.indexOf('view-source:') === 0) {
             
-            // Jika view-source, tampilkan kode acak
-            document.documentElement.innerHTML = '<pre style="color:#000;background:#fff;">' + generateRandomCode() + '</pre>';
+            // Generate kode acak 10.000 karakter
+            let randomCode = '';
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            for(let i = 0; i < 10000; i++) {
+                randomCode += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            
+            document.documentElement.innerHTML = '<html><head><title>Access Denied</title></head><body><pre style="padding:20px;font-size:12px;">' + randomCode + '</pre></body></html>';
             throw new Error("Access Denied");
         }
         
-        // Jika akses normal, tampilkan konten asli
-        // Hapus semua konten sementara
+        // Konten asli dashboard (dalam bentuk terenkripsi)
+        const encryptedDashboard = atob(`PGRpdiBzdHlsZT0icGFkZGluZzoyMHB4O2ZvbnQtZmFtaWx5OkFyaWFsIj4KICAgIDxoMT5BZG1pbiBEYXNoYm9hcmQ8L2gxPgogICAgPHA+U2VsYW1hdCBkYXRhbmcgZGUgUGFuZWwgQWRtaW48L3A+CiAgICA8ZGl2IHN0eWxlPSJiYWNrZ3JvdW5kOiNmZmY7cGFkZGluZzoyMHB4O2JvcmRlci1yYWRpdXM6MTBweDtib3gtc2hhZG93OjAgMnB4IDVweCByZ2JhKDAsMCwwLDAuMSkiPgogICAgICAgIDxoMj5EYXRhIFBlbnRpbmdhPC9oMj4KICAgICAgICA8cD5KdW1sYWggdG90YWwgcGVuamHVhbGFuOiA8c3Ryb25nPjEwMCBhdW5nb2E8L3N0cm9uZz48L3A+CiAgICAgICAgPHA+U2lzYSB5YW5nIGJlbHVtIGJlcmphbGFuLjwvcD4KICAgIDwvZGl2Pgo8L2Rpdj4=`);
+        
+        // Bersihkan dan tampilkan konten asli
         document.documentElement.innerHTML = '';
         
         // Blokir semua shortcut
@@ -39,76 +36,41 @@
                 (e.ctrlKey && e.shiftKey && (key === 'I' || key === 'J' || key === 'C'))) {
                 e.preventDefault();
                 // Tampilkan kode acak
-                document.body.innerHTML = '<pre style="color:#000;background:#fff;">' + generateRandomCode() + '</pre>';
+                let randomCode = '';
+                for(let i = 0; i < 5000; i++) {
+                    randomCode += Math.random().toString(36).charAt(2);
+                }
+                document.body.innerHTML = '<pre>' + randomCode + '</pre>';
                 return false;
             }
         });
         
-        // Blokir right click
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             return false;
         });
         
-        // Matikan console
-        console.log = console.error = console.warn = function() {};
-        
-        // Deteksi devtools
-        setInterval(function() {
-            var before = new Date();
-            debugger;
-            var after = new Date();
-            if (after - before > 100) {
-                document.body.innerHTML = '<pre style="color:#000;background:#fff;">' + generateRandomCode() + '</pre>';
-                setTimeout(function() {
-                    window.location.reload();
-                }, 2000);
-            }
-        }, 1000);
+        // Tampilkan dashboard setelah proteksi
+        setTimeout(() => {
+            document.body.innerHTML = encryptedDashboard;
+            
+            // Tambahkan style
+            const style = document.createElement('style');
+            style.textContent = `
+                body {
+                    margin: 0;
+                    padding: 20px;
+                    font-family: Arial, sans-serif;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    min-height: 100vh;
+                }
+                * {
+                    user-select: none;
+                }
+            `;
+            document.head.appendChild(style);
+        }, 50);
     </script>
 </head>
-<body>
-    <!-- KONTEN ASLI (HANYA TERLIHAT SAAT AKSES NORMAL) -->
-    <div id="real-content" style="display: none;">
-        <!-- GANTI DENGAN KONTEN DASHBOARD ASLI ANDA DI SINI -->
-        <h1>Admin Dashboard</h1>
-        <p>Selamat datang di halaman admin</p>
-        <div class="dashboard">
-            <h2>Data Admin</h2>
-            <p>Konten sensitif Anda di sini</p>
-        </div>
-    </div>
-    
-    <script>
-        // Tampilkan konten asli setelah proteksi berjalan
-        setTimeout(function() {
-            const realContent = document.getElementById('real-content');
-            if (realContent) {
-                realContent.style.display = 'block';
-                
-                // Tambahkan CSS
-                const style = document.createElement('style');
-                style.textContent = `
-                    * {
-                        user-select: none;
-                        -webkit-user-select: none;
-                    }
-                    body {
-                        margin: 0;
-                        padding: 20px;
-                        font-family: Arial, sans-serif;
-                        background: #f0f0f0;
-                    }
-                    .dashboard {
-                        background: white;
-                        padding: 20px;
-                        border-radius: 8px;
-                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-        }, 100);
-    </script>
-</body>
+<body></body>
 </html>
