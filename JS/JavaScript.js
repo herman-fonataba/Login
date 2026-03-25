@@ -439,3 +439,60 @@
       });
 
     })();
+
+/* Penyesuaian untuk halaman lupa password */
+.forgot-password-page .phoenix-wrapper {
+  min-height: auto;
+}
+
+/* Style tambahan untuk tombol kirim */
+#sendResetBtn {
+  transition: all 0.3s ease;
+}
+
+#sendResetBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 0 #7a2e00, 0 0 40px #ffaa33;
+}
+
+/* Style untuk input saat valid/invalid (opsional) */
+.input-group input:valid {
+  border-color: #4caf50;
+}
+
+.input-group input:invalid {
+  border-color: #ff4444;
+}
+
+/* Efek fokus pada input group */
+.input-group.focused i:not(.password-toggle) {
+  color: #ffdd99;
+  text-shadow: 0 0 20px #ffaa33;
+}
+
+/* Animasi tambahan untuk notifikasi */
+.notification {
+  animation: slideUp 0.3s ease;
+}
+
+/* Responsif untuk halaman lupa password */
+@media (max-width: 480px) {
+  .page-title {
+    font-size: clamp(1.1rem, 5vw, 1.5rem);
+  }
+  
+  .phoenix-btn.small {
+    font-size: clamp(1rem, 5vw, 1.2rem);
+    letter-spacing: 2px;
+  }
+}
+
+/* Style untuk link kembali ke login */
+.back-to-login {
+  transition: all 0.2s ease;
+}
+
+.back-to-login:hover {
+  transform: translateX(-3px);
+  text-shadow: 0 0 10px #ffaa33;
+}
