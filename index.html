@@ -3,27 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <!-- Mencegah Google Translate -->
   <meta name="google" content="notranslate">
   <meta name="google-translate-customization" content="notranslate">
   <meta name="robots" content="noindex, nofollow">
+  
+  <!-- JUDUL TAB WEB -->
   <title>PHOENIX TAEKWONDO FAMILY</title>
   
-  <!-- Favicon -->
+  <!-- FAVICON (LOGO SAMA) -->
   <link rel="icon" type="image/svg+xml" href="https://phoenix-taekwondo-family.vercel.app/Foto/PHOENIX%20TAEKWONDO%20FAMILY.svg">
   <link rel="apple-touch-icon" href="https://phoenix-taekwondo-family.vercel.app/Foto/PHOENIX%20TAEKWONDO%20FAMILY.svg">
   
-  <!-- Font Awesome -->
+  <!-- Font Awesome 6 (free) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
-  <!-- Google Fonts -->
+  <!-- GOOGLE FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
   
-  <!-- External CSS -->
+  <!-- EXTERNAL CSS -->
   <link rel="stylesheet" href="https://phoenix-taekwondo-family.vercel.app/CSS/style.css">
 </head>
 <body>
 
-  <!-- Screenshot Detection Overlay -->
+  <!-- SCREENSHOT DETECTION OVERLAY -->
   <div id="screenshotOverlay" class="screenshot-overlay">
     <i class="fas fa-ban"></i>
     <h1>⚠️ TERDETEKSI SCREENSHOT ⚠️</h1>
@@ -31,13 +36,13 @@
     <p style="margin-top: 15px; font-size: 0.9rem;">🔥 Layar akan kembali normal dalam beberapa detik 🔥</p>
   </div>
 
-  <!-- Notification -->
+  <!-- NOTIFICATION -->
   <div id="notification" class="notification">
     <i class="fas fa-info-circle"></i>
     <span id="notificationMessage"></span>
   </div>
 
-  <!-- iPhone Blocker -->
+  <!-- BLOCKER IPHONE -->
   <div class="iphone-blocker" id="iphoneBlocker">
     <div class="blocker-content">
       <i class="fas fa-ban"></i>
@@ -49,15 +54,18 @@
 
   <canvas id="phoenixCanvas"></canvas>
   <div class="dark-overlay"></div>
+
   <div id="emberContainer"></div>
 
-  <!-- Background Glow -->
+  <!-- sayap kiri kanan background -->
   <div class="feather-glow" style="left: -30px; bottom: 0;"></div>
   <div class="feather-glow" style="right: -30px; bottom: 0;"></div>
 
-  <!-- Main Login Container -->
+  <!-- ========== HALAMAN LOGIN ========== -->
   <div id="loginPage" class="phoenix-wrapper visible-page">
     <div class="phoenix-header">
+      
+      <!-- GAMBAR SELAMAT DATANG -->
       <div class="welcome-image-container">
         <img class="welcome-image" 
              src="https://phoenix-taekwondo-family.vercel.app/Foto/SELAMAT%20DATANG.svg" 
@@ -67,6 +75,8 @@
           Gambar "SELAMAT DATANG" tidak ditemukan<br>silakan periksa URL
         </div>
       </div>
+      
+      <!-- LOGO LINGKARAN - TANPA ANIMASI -->
       <div class="logo-container">
         <div class="circle-logo-wrapper">
           <div class="circle-logo">
@@ -78,12 +88,13 @@
       </div>
     </div>
 
-    <form id="loginForm">
+    <form action="#" method="post" id="loginForm">
       <div class="input-group">
         <i class="fas fa-envelope"></i>
         <input type="email" placeholder="Masukkan EMAIL" required>
       </div>
 
+      <!-- PASSWORD GROUP DENGAN SHOW/HIDE DI POJOK KANAN -->
       <div class="input-group password-group">
         <i class="fas fa-lock"></i>
         <input type="password" placeholder="Masukkan PASSWORD" id="passwordField" required>
@@ -94,20 +105,27 @@
         <span></span><span></span><span></span><span></span><span></span>
       </div>
 
+      <!-- LINK LUPA PASSWORD -->
       <div class="phoenix-extras">
-        <a href="https://phoenix-taekwondo-family.vercel.app/lupapassword.html" class="forgot-phoenix"><i class="fa-regular fa-fire-flame-curved"></i> lupa password?</a>
+        <a href="https://phoenix-taekwondo-family.vercel.app/forgot-password.html" class="forgot-phoenix">
+          <i class="fa-regular fa-fire-flame-curved"></i> lupa password?
+        </a>
       </div>
 
-      <button type="submit" class="phoenix-btn">LOGIN</button>
+      <!-- TOMBOL LOGIN -->
+      <button type="submit" class="phoenix-btn">
+        LOGIN
+      </button>
     </form>
 
+    <!-- REGISTER PROMPT DENGAN LINK WHATSAPP (TULISAN NORMAL) -->
     <div class="register-prompt">
       <i class="fas fa-feather"></i>
       Belum punya akun? <a href="https://wa.me/628124587945" target="_blank" rel="noopener noreferrer">Daftar sekarang</a>
       <i class="fas fa-feather"></i>
     </div>
 
-    <!-- Tentang Phoenix -->
+    <!-- KONTEN TENTANG PHOENIX TAEKWONDO FAMILY -->
     <div class="extra-content">
       <h3><i class="fas fa-feather"></i> TENTANG PHOENIX TAEKWONDO FAMILY <i class="fas fa-feather"></i></h3>
       <div class="about-text">
@@ -118,10 +136,11 @@
       </div>
     </div>
 
-    <!-- Jadwal Latihan -->
+    <!-- JADWAL LATIHAN - SMP DI ATAS, SMA DI BAWAH -->
     <div class="extra-content" style="margin-top: 15px;">
       <h3><i class="fas fa-clock"></i> JADWAL LATIHAN <i class="fas fa-clock"></i></h3>
       
+      <!-- SMP NEGERI 1 KOTA SORONG (DI ATAS) -->
       <div class="schedule-school">
         <i class="fas fa-school"></i> SMP NEGERI 1 KOTA SORONG
       </div>
@@ -133,6 +152,7 @@
         </div>
       </div>
       
+      <!-- SMA NEGERI 1 KOTA SORONG (DI BAWAH) -->
       <div class="schedule-school">
         <i class="fas fa-school"></i> SMA NEGERI 1 KOTA SORONG
       </div>
@@ -149,13 +169,13 @@
         </div>
       </div>
       
-      <p style="margin-top: 15px; font-style: italic; color: #ffaa66; border-top: 1px dashed #ff884d; padding-top: 12px;">
+      <p style="margin-top: 15px; font-style: italic; color: #ffaa66; border-top: 1px dashed #ff884d; padding-top: 12px; font-size: clamp(0.85rem, 3.5vw, 0.95rem);">
         <i class="fas fa-fire"></i> Semangat berlatih, bangkit bersama api phoenix!
       </p>
     </div>
   </div>
 
-  <!-- External JavaScript -->
+  <!-- EXTERNAL JAVASCRIPT -->
   <script src="https://phoenix-taekwondo-family.vercel.app/JS/JavaScript.js"></script>
 </body>
 </html>
