@@ -5,77 +5,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loading...</title>
     
-    <!-- PROTEKSI TOTAL + ENKRIPSI -->
     <script>
-        // CEK VIEW-SOURCE
-        (function() {
-            // Jika view-source terdeteksi, redirect ke halaman kosong
-            if (window.location.protocol === 'view-source:' || 
-                window.location.href.indexOf('view-source:') === 0) {
-                window.location.replace('about:blank');
-                return;
+        // ========== PROTEKSI VIEW-SOURCE DENGAN KODE ACAK ==========
+        
+        // Fungsi untuk generate kode acak
+        function generateRandomCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
+            let result = '';
+            for (let i = 0; i < 5000; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
             }
+            return result;
+        }
+        
+        // Cek apakah ini view-source
+        if (window.location.protocol === 'view-source:' || 
+            window.location.href.indexOf('view-source:') === 0 ||
+            document.documentURI.indexOf('view-source:') === 0) {
             
-            // Hapus semua konten sementara
-            document.documentElement.innerHTML = '';
-            
-            // Deklarasi variabel global
-            window.__protected = true;
-            
-            // Blokir semua akses shortcut
-            document.addEventListener('keydown', function(e) {
-                const key = e.key;
-                if (key === 'F12' || key === 'F11' || (e.ctrlKey && key === 'u') ||
-                    (e.ctrlKey && e.shiftKey && (key === 'I' || key === 'J' || key === 'C'))) {
-                    e.preventDefault();
-                    window.location.replace('about:blank');
-                    return false;
-                }
-            });
-            
-            // Blokir right click
-            document.addEventListener('contextmenu', function(e) {
+            // Jika view-source, tampilkan kode acak
+            document.documentElement.innerHTML = '<pre style="color:#000;background:#fff;">' + generateRandomCode() + '</pre>';
+            throw new Error("Access Denied");
+        }
+        
+        // Jika akses normal, tampilkan konten asli
+        // Hapus semua konten sementara
+        document.documentElement.innerHTML = '';
+        
+        // Blokir semua shortcut
+        document.addEventListener('keydown', function(e) {
+            const key = e.key;
+            if (key === 'F12' || key === 'F11' || (e.ctrlKey && key === 'u') ||
+                (e.ctrlKey && e.shiftKey && (key === 'I' || key === 'J' || key === 'C'))) {
                 e.preventDefault();
+                // Tampilkan kode acak
+                document.body.innerHTML = '<pre style="color:#000;background:#fff;">' + generateRandomCode() + '</pre>';
                 return false;
-            });
-            
-            // Matikan console
-            console.log = console.error = console.warn = function() {};
-        })();
+            }
+        });
+        
+        // Blokir right click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Matikan console
+        console.log = console.error = console.warn = function() {};
+        
+        // Deteksi devtools
+        setInterval(function() {
+            var before = new Date();
+            debugger;
+            var after = new Date();
+            if (after - before > 100) {
+                document.body.innerHTML = '<pre style="color:#000;background:#fff;">' + generateRandomCode() + '</pre>';
+                setTimeout(function() {
+                    window.location.reload();
+                }, 2000);
+            }
+        }, 1000);
     </script>
 </head>
 <body>
-    <!-- Konten akan dimuat setelah proteksi -->
-    <div id="app"></div>
+    <!-- KONTEN ASLI (HANYA TERLIHAT SAAT AKSES NORMAL) -->
+    <div id="real-content" style="display: none;">
+        <!-- GANTI DENGAN KONTEN DASHBOARD ASLI ANDA DI SINI -->
+        <h1>Admin Dashboard</h1>
+        <p>Selamat datang di halaman admin</p>
+        <div class="dashboard">
+            <h2>Data Admin</h2>
+            <p>Konten sensitif Anda di sini</p>
+        </div>
+    </div>
     
     <script>
-        // KONTEN ASLI DIENKRIPSI DAN DINAMIS
-        (function() {
-            // Ini adalah konten dashboard Anda (dienkripsi)
-            const encryptedContent = atob(`PGRpdiBzdHlsZT0icGFkZGluZzoyMHB4O2ZvbnQtZmFtaWx5OkFyaWFsLHNhbnMtc2VyaWYiPg0KICAgIDxoMT5BZG1pbiBEYXNoYm9hcmQ8L2gxPg0KICAgIDxwPlNlbGFtYXQgZGF0YW5nIGRpIEFkbWluIFBhbmVsPC9wPg0KICAgIDxkaXYgc3R5bGU9ImJhY2tncm91bmQ6I2YwZjBmMDtwYWRkaW5nOjE1cHg7Ym9yZGVyLXJhZGl1czo1cHgiPg0KICAgICAgICA8aDM+U3RhdHVzOiBBa3RpZjwvaDM+DQogICAgICAgIDxwPkRhc2hib2FyZCBhZG1pbiBzZWRhbmcgYmVyamFsYW4uPC9wPg0KICAgIDwvZGl2Pg0KPC9kaXY+`);
-            
-            // Render konten setelah proteksi berjalan
-            setTimeout(function() {
-                const app = document.getElementById('app');
-                if (app) {
-                    app.innerHTML = encryptedContent;
-                }
+        // Tampilkan konten asli setelah proteksi berjalan
+        setTimeout(function() {
+            const realContent = document.getElementById('real-content');
+            if (realContent) {
+                realContent.style.display = 'block';
                 
-                // Tambahkan CSS anti-select setelah konten dimuat
+                // Tambahkan CSS
                 const style = document.createElement('style');
                 style.textContent = `
                     * {
-                        user-select: none !important;
-                        -webkit-user-select: none !important;
+                        user-select: none;
+                        -webkit-user-select: none;
                     }
                     body {
                         margin: 0;
+                        padding: 20px;
                         font-family: Arial, sans-serif;
+                        background: #f0f0f0;
+                    }
+                    .dashboard {
+                        background: white;
+                        padding: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                     }
                 `;
                 document.head.appendChild(style);
-            }, 100);
-        })();
+            }
+        }, 100);
     </script>
 </body>
 </html>
