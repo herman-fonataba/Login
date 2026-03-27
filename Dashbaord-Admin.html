@@ -2,75 +2,612 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading...</title>
-    
-    <script>
-        // ========== PROTEKSI VIEW-SOURCE DENGAN ENKRIPSI ==========
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Phoenix Admin | Data Peserta</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- External CSS Dashboard Admin -->
+    <link rel="stylesheet" href="https://phoenix-taekwondo-family.vercel.app/CSS/dashboard-admin.css">
+    <style>
+        /* Tambahan untuk modal form yang lebih besar */
+        .modal-content.large {
+            max-width: 900px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        .form-group label {
+            display: block;
+            color: #ffbb77;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            background: #2e1200;
+            border: 1px solid #ff884d;
+            padding: 10px 12px;
+            border-radius: 30px;
+            color: white;
+            outline: none;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #ffaa33;
+            box-shadow: 0 0 10px #ff6600;
+        }
+        .form-group small {
+            font-size: 0.7rem;
+            color: #ffaa66;
+        }
+        .btn-submit {
+            background: linear-gradient(145deg, #ff5500, #ff9933);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 60px 15px 60px 15px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+        .btn-submit:hover {
+            box-shadow: 0 0 20px #ff6600;
+        }
+        .status-aktif { color: #55ff99; }
+        .status-tidak { color: #ff8888; }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffaa66;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 10px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            border-left: 4px solid #ff9933;
+            box-shadow: 0 0 30px rgba(255,100,0,0.5);
+        }
+        .notification.success { border-left-color: #00ff88; color: #aaffcc; }
+        .notification.error { border-left-color: #ff4444; color: #ffaaaa; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="sidebar" id="sidebar">
+    <div class="logo-area">
+        <img src="https://phoenix-taekwondo-family.vercel.app/Foto/PHOENIX%20TAEKWONDO%20FAMILY.svg" alt="Logo Phoenix">
+        <h2>PHOENIX</h2>
+        <p>TAEKWONDO FAMILY</p>
+    </div>
+    <ul class="nav-menu">
+        <li class="nav-item"><a href="#" class="nav-link" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link" data-page="absensi"><i class="fas fa-calendar-check"></i> <span>Absensi</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link active" data-page="peserta"><i class="fas fa-users"></i> <span>Data Peserta</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link" data-page="dokumentasi"><i class="fas fa-camera"></i> <span>Dokumentasi</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link" data-page="monitor"><i class="fas fa-user"></i> <span>Monitor</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link" data-page="settingan"><i class="fas fa-sliders-h"></i> <span>Settingan</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="top-bar">
+        <button class="menu-toggle" id="menuToggleBtn"><i class="fas fa-bars"></i></button>
+        <div class="page-title">
+            <h1><i class="fas fa-users"></i> Data Peserta</h1>
+        </div>
+        <div class="admin-badge">
+            <i class="fas fa-crown"></i> Admin Phoenix • <span id="currentTime"></span>
+        </div>
+    </div>
+
+    <div class="content-panel">
+        <button class="btn-tambah" id="tambahPesertaBtn"><i class="fas fa-user-plus"></i> Tambah Peserta Baru</button>
         
-        // Cek view-source
-        if (window.location.protocol === 'view-source:' || 
-            window.location.href.indexOf('view-source:') === 0) {
-            
-            // Generate kode acak 10.000 karakter
-            let randomCode = '';
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            for(let i = 0; i < 10000; i++) {
-                randomCode += chars.charAt(Math.floor(Math.random() * chars.length));
+        <div id="pesertaContainer" class="peserta-grid">
+            <div style="text-align:center; padding:40px"><i class="fas fa-spinner fa-pulse"></i> Memuat data peserta...</div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL TAMBAH / EDIT PESERTA -->
+<div id="pesertaModal" class="modal">
+    <div class="modal-content large">
+        <div class="modal-header">
+            <h2 id="modalTitle"><i class="fas fa-user-plus"></i> Tambah Peserta Baru</h2>
+            <button class="close-modal" id="closeModalBtn">&times;</button>
+        </div>
+        <form id="pesertaForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nama Lengkap <span style="color:#ff884d">*</span></label>
+                    <input type="text" id="namaLengkap" required placeholder="Nama lengkap peserta">
+                </div>
+                <div class="form-group">
+                    <label>Nama Panggilan</label>
+                    <input type="text" id="namaPanggilan" placeholder="Nama panggilan">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Jenis Kelamin</label>
+                    <select id="jenisKelamin">
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Agama</label>
+                    <select id="agama">
+                        <option value="Islam">Islam</option>
+                        <option value="Kristen">Kristen</option>
+                        <option value="Katolik">Katolik</option>
+                        <option value="Hindu">Hindu</option>
+                        <option value="Buddha">Buddha</option>
+                        <option value="Konghucu">Konghucu</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Tempat Tinggal (Alamat)</label>
+                    <input type="text" id="alamat" placeholder="Alamat lengkap">
+                </div>
+                <div class="form-group">
+                    <label>Asal Dojang</label>
+                    <select id="asalDojang">
+                        <option value="SMANSA">SMANSA</option>
+                        <option value="ZPENSA">ZPENSA</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Kelas / Tingkatan</label>
+                    <select id="kelas">
+                        <option value="I">I</option><option value="II">II</option><option value="III">III</option>
+                        <option value="IV">IV</option><option value="V">V</option><option value="VI">VI</option>
+                        <option value="VII">VII</option><option value="VIII">VIII</option><option value="IX">IX</option>
+                        <option value="X">X</option><option value="XI">XI</option><option value="XII">XII</option>
+                        <option value="Sudah Lulus">Sudah Lulus</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tanggal Lahir</label>
+                    <input type="date" id="tanggalLahir" onchange="hitungUmur()">
+                </div>
+                <div class="form-group">
+                    <label>Umur (Tahun)</label>
+                    <input type="text" id="umur" readonly placeholder="Otomatis terisi">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Berat Badan (kg)</label>
+                    <input type="number" id="beratBadan" step="0.1" placeholder="Contoh: 45.5">
+                </div>
+                <div class="form-group">
+                    <label>Tinggi Badan (cm)</label>
+                    <input type="number" id="tinggiBadan" placeholder="Contoh: 165">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Tingkat Sabuk</label>
+                    <select id="tingkatSabuk">
+                        <option value="Putih (Geup 10)">Putih (Geup 10)</option>
+                        <option value="Kuning (Geup 9)">Kuning (Geup 9)</option>
+                        <option value="Kuning Strip Hijau (Geup 8)">Kuning Strip Hijau (Geup 8)</option>
+                        <option value="Hijau (Geup 7)">Hijau (Geup 7)</option>
+                        <option value="Hijau Strip Biru (Geup 6)">Hijau Strip Biru (Geup 6)</option>
+                        <option value="Biru (Geup 5)">Biru (Geup 5)</option>
+                        <option value="Biru Strip Merah (Geup 4)">Biru Strip Merah (Geup 4)</option>
+                        <option value="Merah (Geup 3)">Merah (Geup 3)</option>
+                        <option value="Merah Strip Hitam (Poom 1)">Merah Strip Hitam (Poom 1)</option>
+                        <option value="Merah Strip Hitam (Poom 2)">Merah Strip Hitam (Poom 2)</option>
+                        <option value="Merah Strip Hitam (Poom 3)">Merah Strip Hitam (Poom 3)</option>
+                        <option value="Hitam (Dan 1)">Hitam (Dan 1)</option>
+                        <option value="Hitam (Dan 2)">Hitam (Dan 2)</option>
+                        <option value="Hitam (Dan 3)">Hitam (Dan 3)</option>
+                        <option value="Hitam (Dan 4)">Hitam (Dan 4)</option>
+                        <option value="Hitam (Dan 5)">Hitam (Dan 5)</option>
+                        <option value="Hitam (Dan 6)">Hitam (Dan 6)</option>
+                        <option value="Hitam (Dan 7)">Hitam (Dan 7)</option>
+                        <option value="Hitam (Dan 8)">Hitam (Dan 8)</option>
+                        <option value="Hitam (Dan 9)">Hitam (Dan 9)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Status Latihan</label>
+                    <select id="statusLatihan">
+                        <option value="Aktif">Aktif</option>
+                        <option value="Tidak Aktif">Tidak Aktif</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn-submit" id="submitBtn"><i class="fas fa-save"></i> Simpan Data</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL INFO PESERTA -->
+<div id="infoModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-info-circle"></i> Detail Peserta</h2>
+            <button class="close-modal" id="closeInfoModalBtn">&times;</button>
+        </div>
+        <div id="infoContent" style="color:#ffddaa; line-height:1.8;">
+            <!-- Detail akan diisi JavaScript -->
+        </div>
+    </div>
+</div>
+
+<!-- NOTIFICATION -->
+<div id="notification" class="notification">
+    <i class="fas fa-info-circle"></i>
+    <span id="notificationMessage"></span>
+</div>
+
+<script>
+    // ======================== GOOGLE SHEETS CONFIG ========================
+    // GANTI URL INI DENGAN DEPLOYMENT APPS SCRIPT ANDA
+    const SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
+    
+    // Data peserta lokal (akan disinkronkan dengan sheet)
+    let pesertaData = [];
+    let editId = null;
+    
+    // Fungsi hitung umur
+    function hitungUmur() {
+        const tglLahir = document.getElementById('tanggalLahir').value;
+        if (tglLahir) {
+            const birthDate = new Date(tglLahir);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
             }
-            
-            document.documentElement.innerHTML = '<html><head><title>Access Denied</title></head><body><pre style="padding:20px;font-size:12px;">' + randomCode + '</pre></body></html>';
-            throw new Error("Access Denied");
+            document.getElementById('umur').value = age;
+        }
+    }
+    
+    // Fungsi notifikasi
+    function showNotification(message, isSuccess = true) {
+        const notification = document.getElementById('notification');
+        const messageSpan = document.getElementById('notificationMessage');
+        notification.className = 'notification ' + (isSuccess ? 'success' : 'error');
+        messageSpan.innerHTML = message;
+        notification.style.display = 'flex';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 4000);
+    }
+    
+    // Ambil data dari Google Sheets (Sheet8)
+    async function loadDataFromSheet() {
+        try {
+            const response = await fetch(`${SCRIPT_URL}?action=getData`);
+            const data = await response.json();
+            if (data.status === 'success') {
+                pesertaData = data.data;
+                renderPesertaCards();
+            } else {
+                // Fallback ke data demo jika sheet kosong
+                loadDemoData();
+            }
+        } catch (error) {
+            console.error('Error loading data:', error);
+            loadDemoData();
+        }
+    }
+    
+    // Data demo untuk tampilan awal
+    function loadDemoData() {
+        pesertaData = [
+            { id: 1, nomorUrut: 1, namaLengkap: "Arjuna Pratama", namaPanggilan: "Arjuna", jenisKelamin: "Laki-laki", agama: "Islam", alamat: "Jl. Merpati No.12", asalDojang: "SMANSA", kelas: "XI", tanggalLahir: "2008-05-15", umur: 17, beratBadan: 55.5, tinggiBadan: 165, tingkatSabuk: "Merah (Geup 3)", statusLatihan: "Aktif" },
+            { id: 2, nomorUrut: 2, namaLengkap: "Kirana Dewi", namaPanggilan: "Kirana", jenisKelamin: "Perempuan", agama: "Kristen", alamat: "Jl. Anggrek No.5", asalDojang: "ZPENSA", kelas: "X", tanggalLahir: "2009-08-20", umur: 16, beratBadan: 48, tinggiBadan: 158, tingkatSabuk: "Hijau Strip Biru (Geup 6)", statusLatihan: "Aktif" },
+            { id: 3, nomorUrut: 3, namaLengkap: "Bayu Saputra", namaPanggilan: "Bayu", jenisKelamin: "Laki-laki", agama: "Islam", alamat: "Jl. Cendrawasih No.8", asalDojang: "SMANSA", kelas: "IX", tanggalLahir: "2010-02-10", umur: 15, beratBadan: 52, tinggiBadan: 162, tingkatSabuk: "Kuning (Geup 9)", statusLatihan: "Aktif" }
+        ];
+        renderPesertaCards();
+    }
+    
+    // Simpan data ke Google Sheets
+    async function saveToSheet(data, isEdit = false) {
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: isEdit ? 'update' : 'add',
+                    data: JSON.stringify(data)
+                })
+            });
+            return true;
+        } catch (error) {
+            console.error('Error saving to sheet:', error);
+            return false;
+        }
+    }
+    
+    // Render card peserta
+    function renderPesertaCards() {
+        const container = document.getElementById('pesertaContainer');
+        if (!container) return;
+        
+        const sortedPeserta = [...pesertaData].sort((a, b) => {
+            return (a.nomorUrut || 0) - (b.nomorUrut || 0);
+        });
+        
+        if (sortedPeserta.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:40px; color:#ffaa66;">Belum ada data peserta. Klik "Tambah Peserta Baru" untuk menambahkan.</div>';
+            return;
         }
         
-        // Konten asli dashboard (dalam bentuk terenkripsi)
-        const encryptedDashboard = atob(`PGRpdiBzdHlsZT0icGFkZGluZzoyMHB4O2ZvbnQtZmFtaWx5OkFyaWFsIj4KICAgIDxoMT5BZG1pbiBEYXNoYm9hcmQ8L2gxPgogICAgPHA+U2VsYW1hdCBkYXRhbmcgZGUgUGFuZWwgQWRtaW48L3A+CiAgICA8ZGl2IHN0eWxlPSJiYWNrZ3JvdW5kOiNmZmY7cGFkZGluZzoyMHB4O2JvcmRlci1yYWRpdXM6MTBweDtib3gtc2hhZG93OjAgMnB4IDVweCByZ2JhKDAsMCwwLDAuMSkiPgogICAgICAgIDxoMj5EYXRhIFBlbnRpbmdhPC9oMj4KICAgICAgICA8cD5KdW1sYWggdG90YWwgcGVuamHVhbGFuOiA8c3Ryb25nPjEwMCBhdW5nb2E8L3N0cm9uZz48L3A+CiAgICAgICAgPHA+U2lzYSB5YW5nIGJlbHVtIGJlcmphbGFuLjwvcD4KICAgIDwvZGl2Pgo8L2Rpdj4=`);
-        
-        // Bersihkan dan tampilkan konten asli
-        document.documentElement.innerHTML = '';
-        
-        // Blokir semua shortcut
-        document.addEventListener('keydown', function(e) {
-            const key = e.key;
-            if (key === 'F12' || key === 'F11' || (e.ctrlKey && key === 'u') ||
-                (e.ctrlKey && e.shiftKey && (key === 'I' || key === 'J' || key === 'C'))) {
-                e.preventDefault();
-                // Tampilkan kode acak
-                let randomCode = '';
-                for(let i = 0; i < 5000; i++) {
-                    randomCode += Math.random().toString(36).charAt(2);
-                }
-                document.body.innerHTML = '<pre>' + randomCode + '</pre>';
-                return false;
-            }
-        });
-        
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
-        });
-        
-        // Tampilkan dashboard setelah proteksi
-        setTimeout(() => {
-            document.body.innerHTML = encryptedDashboard;
+        container.innerHTML = sortedPeserta.map((peserta, idx) => {
+            const nomorUrut = peserta.nomorUrut || (idx + 1);
+            const sabuk = peserta.tingkatSabuk || "Putih (Geup 10)";
+            const statusClass = peserta.statusLatihan === 'Aktif' ? 'status-aktif' : 'status-tidak';
             
-            // Tambahkan style
-            const style = document.createElement('style');
-            style.textContent = `
-                body {
-                    margin: 0;
-                    padding: 20px;
-                    font-family: Arial, sans-serif;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    min-height: 100vh;
-                }
-                * {
-                    user-select: none;
-                }
+            return `
+                <div class="peserta-card" data-id="${peserta.id}">
+                    <div class="card-header">
+                        <div class="profile-icon">
+                            ${(peserta.namaLengkap || peserta.namaPanggilan || 'P').charAt(0).toUpperCase()}
+                        </div>
+                        <div class="card-title">
+                            <h3>${peserta.namaLengkap || peserta.namaPanggilan}</h3>
+                            <span class="card-number">#${nomorUrut}</span>
+                            <span class="${statusClass}" style="margin-left:8px;">${peserta.statusLatihan || 'Aktif'}</span>
+                        </div>
+                    </div>
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <span class="detail-label">🏷️ Panggilan</span>
+                            <span class="detail-value">${peserta.namaPanggilan || '-'}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">🥋 Tingkat Sabuk</span>
+                            <span class="detail-value">${sabuk}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">🏫 Asal Dojang</span>
+                            <span class="detail-value">${peserta.asalDojang || '-'}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">📚 Kelas</span>
+                            <span class="detail-value">${peserta.kelas || '-'}</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="card-btn btn-info" onclick="showInfoPeserta(${peserta.id})">
+                            <i class="fas fa-info-circle"></i> INFO
+                        </button>
+                        <button class="card-btn btn-edit" onclick="editPeserta(${peserta.id})">
+                            <i class="fas fa-edit"></i> EDIT
+                        </button>
+                        <button class="card-btn btn-hapus" onclick="hapusPeserta(${peserta.id})">
+                            <i class="fas fa-trash-alt"></i> HAPUS
+                        </button>
+                    </div>
+                </div>
             `;
-            document.head.appendChild(style);
-        }, 50);
-    </script>
-</head>
-<body></body>
+        }).join('');
+    }
+    
+    // Tampilkan info detail peserta
+    function showInfoPeserta(id) {
+        const peserta = pesertaData.find(p => p.id === id);
+        if (!peserta) return;
+        
+        const infoContent = document.getElementById('infoContent');
+        infoContent.innerHTML = `
+            <div class="detail-item"><span class="detail-label">Nama Lengkap:</span> <span>${peserta.namaLengkap || '-'}</span></div>
+            <div class="detail-item"><span class="detail-label">Nama Panggilan:</span> <span>${peserta.namaPanggilan || '-'}</span></div>
+            <div class="detail-item"><span class="detail-label">Jenis Kelamin:</span> <span>${peserta.jenisKelamin || '-'}</span></div>
+            <div class="detail-item"><span class="detail-label">Agama:</span> <span>${peserta.agama || '-'}</span></div>
+            <div class="detail-item"><span class="detail-label">Tempat Tinggal:</span> <span>${peserta.alamat || '-'}</span></div>
+            <div class="detail-item"><span class="detail-label">Asal Dojang:</span> <span>${peserta.asalDojang || '-'}</span></div>
+            <div class="detail-item"><span class="detail-label">Kelas:</span> <span>${peserta.kelas || '-'}</span></div>
+            <div class="detail-item"><span class="detail-label">Tanggal Lahir:</span> <span>${peserta.tanggalLahir || '-'}</span></div>
+            <div class="detail-item"><span class="detail-label">Umur:</span> <span>${peserta.umur || '-'} tahun</span></div>
+            <div class="detail-item"><span class="detail-label">Berat Badan:</span> <span>${peserta.beratBadan || '-'} kg</span></div>
+            <div class="detail-item"><span class="detail-label">Tinggi Badan:</span> <span>${peserta.tinggiBadan || '-'} cm</span></div>
+            <div class="detail-item"><span class="detail-label">Tingkat Sabuk:</span> <span>${peserta.tingkatSabuk || '-'}</span></div>
+            <div class="detail-item"><span class="detail-label">Status Latihan:</span> <span class="${peserta.statusLatihan === 'Aktif' ? 'status-aktif' : 'status-tidak'}">${peserta.statusLatihan || '-'}</span></div>
+        `;
+        
+        document.getElementById('infoModal').classList.add('active');
+    }
+    
+    // Edit peserta
+    function editPeserta(id) {
+        const peserta = pesertaData.find(p => p.id === id);
+        if (!peserta) return;
+        
+        editId = id;
+        document.getElementById('modalTitle').innerHTML = '<i class="fas fa-edit"></i> Edit Peserta';
+        
+        // Isi form dengan data peserta
+        document.getElementById('namaLengkap').value = peserta.namaLengkap || '';
+        document.getElementById('namaPanggilan').value = peserta.namaPanggilan || '';
+        document.getElementById('jenisKelamin').value = peserta.jenisKelamin || 'Laki-laki';
+        document.getElementById('agama').value = peserta.agama || 'Islam';
+        document.getElementById('alamat').value = peserta.alamat || '';
+        document.getElementById('asalDojang').value = peserta.asalDojang || 'SMANSA';
+        document.getElementById('kelas').value = peserta.kelas || 'X';
+        document.getElementById('tanggalLahir').value = peserta.tanggalLahir || '';
+        document.getElementById('umur').value = peserta.umur || '';
+        document.getElementById('beratBadan').value = peserta.beratBadan || '';
+        document.getElementById('tinggiBadan').value = peserta.tinggiBadan || '';
+        document.getElementById('tingkatSabuk').value = peserta.tingkatSabuk || 'Putih (Geup 10)';
+        document.getElementById('statusLatihan').value = peserta.statusLatihan || 'Aktif';
+        
+        document.getElementById('pesertaModal').classList.add('active');
+    }
+    
+    // Hapus peserta
+    function hapusPeserta(id) {
+        const peserta = pesertaData.find(p => p.id === id);
+        if (peserta && confirm(`Apakah Anda yakin ingin menghapus peserta "${peserta.namaLengkap || peserta.namaPanggilan}"?`)) {
+            pesertaData = pesertaData.filter(p => p.id !== id);
+            renderPesertaCards();
+            showNotification(`✅ Peserta ${peserta.namaLengkap || peserta.namaPanggilan} telah dihapus.`, true);
+            // Simpan ke sheet (opsional)
+        }
+    }
+    
+    // Submit form tambah/edit
+    document.getElementById('pesertaForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = {
+            id: editId || Date.now(),
+            nomorUrut: pesertaData.length + 1,
+            namaLengkap: document.getElementById('namaLengkap').value,
+            namaPanggilan: document.getElementById('namaPanggilan').value,
+            jenisKelamin: document.getElementById('jenisKelamin').value,
+            agama: document.getElementById('agama').value,
+            alamat: document.getElementById('alamat').value,
+            asalDojang: document.getElementById('asalDojang').value,
+            kelas: document.getElementById('kelas').value,
+            tanggalLahir: document.getElementById('tanggalLahir').value,
+            umur: document.getElementById('umur').value,
+            beratBadan: document.getElementById('beratBadan').value,
+            tinggiBadan: document.getElementById('tinggiBadan').value,
+            tingkatSabuk: document.getElementById('tingkatSabuk').value,
+            statusLatihan: document.getElementById('statusLatihan').value
+        };
+        
+        const submitBtn = document.getElementById('submitBtn');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = 'Menyimpan... <span class="loading-spinner"></span>';
+        submitBtn.disabled = true;
+        
+        if (editId) {
+            // Update data
+            const index = pesertaData.findIndex(p => p.id === editId);
+            if (index !== -1) {
+                pesertaData[index] = { ...pesertaData[index], ...formData };
+            }
+            showNotification(`✅ Data peserta ${formData.namaLengkap} berhasil diperbarui!`, true);
+        } else {
+            // Tambah baru
+            pesertaData.push(formData);
+            showNotification(`✅ Peserta ${formData.namaLengkap} berhasil ditambahkan!`, true);
+        }
+        
+        renderPesertaCards();
+        
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        editId = null;
+        document.getElementById('pesertaModal').classList.remove('active');
+        document.getElementById('pesertaForm').reset();
+    });
+    
+    // Modal controls
+    document.getElementById('tambahPesertaBtn').addEventListener('click', () => {
+        editId = null;
+        document.getElementById('modalTitle').innerHTML = '<i class="fas fa-user-plus"></i> Tambah Peserta Baru';
+        document.getElementById('pesertaForm').reset();
+        document.getElementById('umur').value = '';
+        document.getElementById('pesertaModal').classList.add('active');
+    });
+    
+    document.getElementById('closeModalBtn').addEventListener('click', () => {
+        document.getElementById('pesertaModal').classList.remove('active');
+    });
+    
+    document.getElementById('closeInfoModalBtn').addEventListener('click', () => {
+        document.getElementById('infoModal').classList.remove('active');
+    });
+    
+    // Sidebar toggle
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebarOverlay");
+    const menuToggle = document.getElementById("menuToggleBtn");
+    
+    function closeSidebar() {
+        sidebar.classList.remove("open");
+        overlay.classList.remove("active");
+    }
+    function openSidebar() {
+        sidebar.classList.add("open");
+        overlay.classList.add("active");
+    }
+    if (menuToggle) {
+        menuToggle.addEventListener("click", (e) => {
+            e.stopPropagation();
+            if (sidebar.classList.contains("open")) closeSidebar();
+            else openSidebar();
+        });
+    }
+    overlay.addEventListener("click", closeSidebar);
+    
+    // Navigasi
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        if(link.id !== 'logoutBtn' && link.getAttribute('data-page') !== 'peserta'){
+            link.addEventListener('click', function(e){
+                e.preventDefault();
+                alert(`Halaman ${this.querySelector('span')?.innerText || 'ini'} akan segera hadir.`);
+                if(window.innerWidth <= 768) closeSidebar();
+            });
+        }
+    });
+    
+    document.getElementById("logoutBtn")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        if(confirm("Apakah Anda yakin ingin logout?")) alert("Anda telah logout.");
+    });
+    
+    // Jam
+    function updateClock(){
+        const now = new Date();
+        const timeSpan = document.getElementById('currentTime');
+        if(timeSpan) timeSpan.innerText = now.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+    
+    // Load data
+    loadDataFromSheet();
+</script>
+</body>
 </html>
